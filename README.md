@@ -1,2 +1,10 @@
 # ActionRogueLike
-Following the Tom Looman C++ UE5 course
+
+This repo is my code and content submissions after each Lecture in the course "Professional Game Development in C++ and Unreal Engine" by Tom Looman. I am specifically following the original course which was created for Unreal Engine 4.26. I am using Unreal Engine 5.6 for my code and that means I'm making some adjustments to account for the differences.
+
+There is a newer version of the course that is currently a WIP and should be available sometime in the near future.
+
+Here's a link to Tom Looman's site to learn more:
+
+https://tomlooman.com/
+
