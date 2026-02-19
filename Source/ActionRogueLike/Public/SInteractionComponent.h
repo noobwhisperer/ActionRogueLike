@@ -19,12 +19,15 @@ public:
 
 
 	void PrimaryInteract();
-
 	USInteractionComponent();
 
 protected:
 
 	virtual void BeginPlay() override;
+
+	void PrimaryInteract_Line();
+	void PrimaryInteract_SphereSweep();
+
 
 public:	
 

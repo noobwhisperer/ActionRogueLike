@@ -69,3 +69,9 @@ Lecture 4: Interfaces and Collision Queries
 
 Commit : Lecture 4.2 a : ActorComponents & Collision
 
+		- continuing Lecture ... sphere sweep tests
+			+ note: I will keep the line trace and create a new sphere sweep trace just so I have both for reference
+
+		- finished adding the line and sphere trace versions ... Lecture 4.2 complete. checkpoint code
+
+Commit : Lecture 4.2 b : ActorComponents & Collision
