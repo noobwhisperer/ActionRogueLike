@@ -75,3 +75,17 @@ Commit : Lecture 4.2 a : ActorComponents & Collision
 		- finished adding the line and sphere trace versions ... Lecture 4.2 complete. checkpoint code
 
 Commit : Lecture 4.2 b : ActorComponents & Collision
+
+	4.3 : Animations and Timers
+
+		- Adding an animation to our character during his attack
+			+ note - this is easy since we already have the animations for it from Paragon!
+		- Add a variable called AttackAnim to the ASCharacter (type = UAnimMontage*) ... allows us to bind in Editor
+		- Using UPROPERTY Category = "Attack" to help organize the BP layout
+		- for now we use a timer to control moment the projectile spawns ... eventually (better) approach will
+			use anim notify or other techniques.
+
+		- completed Lecture 4.3 .... checkpoint code
+
+Commit : Lecture 4.3 : Animations and Timers
+		

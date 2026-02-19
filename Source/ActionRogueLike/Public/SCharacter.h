@@ -9,7 +9,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class USInteractionComponent;
-
+class UAnimMontage;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -17,8 +17,13 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	UAnimMontage* AttackAnimMontage;
+
+	FTimerHandle TimerHandle_PrimaryAttack;
 
 public:
 	ASCharacter();
@@ -39,6 +44,8 @@ protected:
 	void MoveRight(float Value);
 
 	void PrimaryAttack();
+
+	void PrimaryAttack_TimeElapsed() const;
 
 	void PrimaryInteract();
 
