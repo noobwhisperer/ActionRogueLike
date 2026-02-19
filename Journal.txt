@@ -1,0 +1,71 @@
+This is a lightweight journal of the steps for the Tom Looman course. The hope is to capture any snags or "gotchas"
+and what I did as a work-around. I will keep the notes short and to the point (not intended to re-write the course notes):
+
+
+Lecture 1:
+
+	- He used UE 4.25 in the original course. I'm using UE 5.6
+
+Lecture 2:
+
+	- Some differences for UE 5.6
+		+ Enhanced input is available and the old input system is deprecated. I will used the old input system
+			for now, but I plan to upgrade it after I get the whole system working (later).
+		+ The old VFX system is also deprecated. I chose to go ahead and upgrade to Niagara, so there were a
+			few steps to get basic Niagara working.
+
+Lecture 3:
+
+
+Lecture 4: Interfaces and Collision Queries
+
+	4.1 : Interfaces
+		- create an interface component derived from UActorComponent : USInteractionComponent
+
+	4.2 : Actor Components / Collision
+		- Using Actor components to separate various functionality within the SCharacter class (by composition).
+		- create USInteractionComponent
+			+ responsible for  handling a character's interactions with objects in the scene (e.g. a treasure chest)
+		- COOL : Notice how you can bind the interface's "Interact" function from the AActor (APawn - by way of the
+			interaction component) that is interested in performing interactions:
+
+				void USInteractionComponent::PrimaryInteract()
+				{
+
+					// perform query to determine if we are near an "interactable" object
+
+					FHitResult OutHitResult;
+					FCollisionObjectQueryParams ObjectQueryParams;
+					ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+
+					FVector EyeLocation;
+					FRotator EyeRotation;
+
+					AActor* MyOwner = GetOwner();
+					MyOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+
+					FVector End = EyeLocation + (EyeRotation.Vector()*1000);
+
+
+					GetWorld()->LineTraceSingleByObjectType(OutHitResult, EyeLocation, End, ObjectQueryParams);
+
+					// debugging : draw the query line - might need to do this
+					const float Lifetime = 2.0f;
+				    DrawDebugLine(GetWorld(), EyeLocation, End, FColor::Red, false, Lifetime, 0, 2.0f);
+
+					AActor* HitActor = OutHitResult.GetActor();
+
+					if(HitActor && HitActor->Implements<USGameplayInterface>() )
+					{
+						APawn* OwnerPawn = Cast<APawn>(GetOwner());
+						ISGameplayInterface::Execute_Interact(HitActor, OwnerPawn);
+					}
+
+				}
+		- 17:24 : The InteractionComp absolutely should exist at this point, so I will use an assert here
+			instead of branch guards
+
+		- 25:50 : got it working fine with the line trace ... checkpointing code
+
+Commit : Lecture 4.2 a : ActorComponents & Collision
+
