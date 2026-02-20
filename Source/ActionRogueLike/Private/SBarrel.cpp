@@ -18,10 +18,11 @@ ASBarrel::ASBarrel()
     ExplosionForceComp->SetupAttachment(RootComponent);
 
     // configure the radial force - defaults
-    ExplosionForceComp->Radius = 500.0f;
-    ExplosionForceComp->ImpulseStrength = 2000.0f;
+    ExplosionForceComp->Radius = 1000.0f;
+    ExplosionForceComp->ImpulseStrength = 200000.0f;
     ExplosionForceComp->bImpulseVelChange = false;
-    ExplosionForceComp->bAutoActivate = false; 
+    ExplosionForceComp->bAutoActivate = false;
+    ExplosionForceComp->Falloff = ERadialImpulseFalloff::RIF_Linear;
 }
 
 void ASBarrel::BeginPlay()

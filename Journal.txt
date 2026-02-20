@@ -126,5 +126,42 @@ Lecture 5.4 Projectile Blueprint & Collision
 	- details discussed about differences between events and functions in BP
 
 
+Commit : Lecture 5.4 Projectile Blueprint & Collision
 
 
+
+Lecture 6 : Debugging Tools
+
+Lectuire 6.1 : Assignment 1 Solution Review
+
+	- note: handy button on right side of BP to reset any properties (that have been adjusted) to the default values
+	- note: changes to the default properties in the C++ constructor do not (always? sometimes?) propagate to the running engine via Hot Reload
+	- note: UE5.6 physics is still a giant piece of crap! e.g. radial force component has a "Force Strength" and an
+		"Impulse Strength". The former seems to do nothing, but I'm not going to take the time to chase it down.
+
+		> Ok I lied ... I took a couple minutes to scan through the UE code and discover the messiness that makes this so confusing.
+			1. Take a peek at how WE have set up trhe barrel. Our callback is calling the RadialForceComponent's "FireImpulse()" method directly
+				- we never set anything up that will apply the "ForceStrength" force within the components Tick !
+			2. So, what the heck is going on here?
+				- IT'S CRAP !
+				- UE has created the URadialForceComponent with too many responsibilities within a single class !
+				- There's actually 2 completely separate interfaces here.
+					> "Impulse" Approach : You can set values for the impulse approach and "wire it up" to the "FireImpulse" method. You can
+						set the flag to apply the same delta-V to all objects (regardless of their mass). This is NOT physical, but people us
+						it alot because it's easier to tune than understanding the physics.
+					> "Force" Approach : You can set the ForceStrength , then Activate (or auto-Activate) this component and forces
+						will be applied through the logic in the TickComponent. This is FANCY, and includes ability to Tick at specified
+						intervals (pulse). Note that for this case the MASS of the objects are taken into consideration since it applies forces
+						instead of impulses flagged to apply the same delta-V for all objects.
+
+					> NOTE: You can set up BOTH approaches to work within a single instance ! FANCY - but makes these interfaces quite confusing.
+
+				- I created a BP example "RadialForceBlackHoleBP" : Use this as an example of how things can be "wired up" to implement
+					both approaches simultaneously. This "Black Hole" continuously "pulls objects" into it, but every 5 seconds there is
+					an impulse applied to all the "trapped" objects that pushes them outward.
+
+					> NOTE: The SCharacter only gets pulled into the black hole whe he jumps (probably physics is not simulating when he's
+						in contact with the ground so the controller has complete control of his movement)
+
+
+Commit : Lecture 6.1 : Assignment 1 Solution Review
