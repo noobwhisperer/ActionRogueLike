@@ -191,6 +191,12 @@ Commit : Lecture 6.1 : Assignment 1 Solution Review
 
 Commit : Lecture 6.3 : Debugging
 
-	Lectur 6.4 : Camera Changes & First UMG
+	Lecture 6.4 : Camera Changes & First UMG
+
+		- adjust the camera
+		- create HUD with reticle ... using Widgets
+
+
+Commit : 6.4 : Camera Changes & First UMG
 
 
