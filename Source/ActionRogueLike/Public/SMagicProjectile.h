@@ -24,16 +24,16 @@ protected:
 
 
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USphereComponent* SphereComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UProjectileMovementComponent* MovementComp;
 
 	// UPROPERTY(VisibleAnywhere)
 	// UParticleSystemComponent* EffectComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* NiagaraComp;
 
 	virtual void BeginPlay() override;

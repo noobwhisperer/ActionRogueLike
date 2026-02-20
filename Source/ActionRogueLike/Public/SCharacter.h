@@ -45,7 +45,7 @@ protected:
 
 	void PrimaryAttack();
 
-	void PrimaryAttack_TimeElapsed() const;
+	void PrimaryAttack_TimeElapsed();
 
 	void PrimaryInteract();
 

@@ -120,7 +120,10 @@ Lecture 5.3
 
 Commit : Lecture 5.3 : Animating in Blueprint
 
+Lecture 5.4 Projectile Blueprint & Collision
 
+	- more improvements to the projectile with VFX on impact and destroy on impact
+	- details discussed about differences between events and functions in BP
 
 
 

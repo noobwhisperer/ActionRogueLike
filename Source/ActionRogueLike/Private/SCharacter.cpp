@@ -66,12 +66,15 @@ void ASCharacter::PrimaryAttack()
 
 }
 
-void ASCharacter::PrimaryAttack_TimeElapsed() const
+void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	FTransform SpawnTM = FTransform(GetControlRotation(), RightHandLocation);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	SpawnParams.Instigator = this;
+
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
