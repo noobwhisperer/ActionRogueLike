@@ -165,3 +165,32 @@ Lectuire 6.1 : Assignment 1 Solution Review
 
 
 Commit : Lecture 6.1 : Assignment 1 Solution Review
+
+	Lecture 6.2 : Hotreload
+		- obsolete, 5.6 has Live Coding ... works much better, but still some gotchas to be aware of
+
+	Lecture 6.3 : Debugging
+		- UE_LOG macros
+		- debug draw commands
+
+		- UMH ! FVector is now implementing "double" values instead of "float"  !!!
+			+ just .... WOW. This is not a good approach IMO . They should have just templatized FVector
+				and used some aliases or other mechanism to default FVector to "float". There can be a lot
+				of perfomance and memory consequences of this and by changing the built in behavior
+				in MathFwd.h , they force it upon ALL of us - probably just because they were focusing on
+				the "large world streaming" issues.
+
+				of course we can override or adjust these using statemtents as well. but would be nice for the engine
+				to map "platform dependent types" in a backward-compatible way.
+
+		- Editor symbols for debugging ... test this out (I build the engine locally)
+			+ Cool - works, and I can step through the engine code from my source in
+				VS editor (for Development Editor config)
+
+		- Setting debug breakpoints on Blueprint nodes
+
+Commit : Lecture 6.3 : Debugging
+
+	Lectur 6.4 : Camera Changes & First UMG
+
+

@@ -4,6 +4,7 @@
 
 #include "SMagicProjectile.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
 ASBarrel::ASBarrel()
@@ -63,5 +64,16 @@ void ASBarrel::OnBarrelHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 
     //TODO: A more complete approach would switch the barrel's state to "exploded" and it would not be allowed to explode
     //  again, and the mesh/material might be swapped to show this barrel already blew up
+
+
+
+    // demonstrate debugging logs
+
+    UE_LOG(LogTemp, Log, TEXT("OnBarrelHit in ASBarrel class!"));
+
+    UE_LOG(LogTemp, Warning, TEXT("Other Actor = %s, at game time = %f"), *GetNameSafe(OtherActor) , GetWorld()->TimeSeconds);
+
+    FString CombinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
+    DrawDebugString(GetWorld(), Hit.ImpactPoint + FVector(0.0f, 0.0f, 150.0f), CombinedString, nullptr, FColor::Orange, 2.0f, true);
 
 }
