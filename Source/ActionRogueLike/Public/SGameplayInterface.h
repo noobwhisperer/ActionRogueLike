@@ -31,7 +31,7 @@ public:
 	/// Blueprint event for "Interact" that can be defined in C++ AND also override with BP if desired.
 	/// </summary>
 	/// <param name="InstigatorPawn">The pawn that would like to perform the interaction</param>
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Interact(APawn* InstigatorPawn);
 
 };

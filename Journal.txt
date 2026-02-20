@@ -88,4 +88,40 @@ Commit : Lecture 4.2 b : ActorComponents & Collision
 		- completed Lecture 4.3 .... checkpoint code
 
 Commit : Lecture 4.3 : Animations and Timers
-		
+
+
+Lecture 5.1
+	- intro to BPs
+
+Lecture 5.2
+	- create a BP class derived from AActor for a "Lever"
+	- You can modify the BP so it will implement our C++ interaction interface !
+		+ go to Class Settings
+		+ Add "SGameplayInterface" to list of Implemented Interfaces
+			> recall we had an overridable BPE in this C++ interface! , called "Interact"
+		+ We now see the "Interact" function listed in the My Blueprint tab under INTERFACES on the right.
+		+ double-click it... you'll now see an event in the event graph to provide BP "code" for this event.
+
+		+ we didn't mark up the "Interact" BPE to be BP Callable though, so we need to edit the code for it now
+
+Lecture 5.3
+	- when you implement the "Interact" BPE in Blueprint for the treasure chest, it will OVERRIDE the C++ code in the base class
+		so only operations performed in the Blueprint "code" will be executed.
+		> (? maybe there's a way to also call the C++ native function directly within the BP code so you could then "append" to
+			the C++ code ?)
+		> Aha YES - Add Call To Parent Function in BP ... they already though about this
+
+		> right click on the "Event Interact" node in BP graph to place the "Add Call To Parent"
+
+	- introduced the "timeline" node in BP
+
+
+	- checkpoint code and data:
+
+Commit : Lecture 5.3 : Animating in Blueprint
+
+
+
+
+
+
