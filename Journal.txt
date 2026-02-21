@@ -199,4 +199,11 @@ Commit : Lecture 6.3 : Debugging
 
 Commit : 6.4 : Camera Changes & First UMG
 
+	Lecture 6.5 : Assignment 2
+		- Fix projectile (in C++) ... easy, just do it.
+
+		- NOTE: found some bugs ! missing include files in all cpp classes ... probably hidden by Unity builds
+			+ track them all down by individually compiling each cpp
+
+Commit : 6.5 WIP - checkpoint code/data ... OBS sample , fixed projectile aiming but need a longer target ray
 

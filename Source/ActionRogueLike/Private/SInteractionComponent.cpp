@@ -3,8 +3,13 @@
 
 #include "SInteractionComponent.h"
 
+#include "CollisionQueryParams.h"
+#include "DrawDebugHelpers.h"
 #include "SGameplayInterface.h"
-
+#include "Engine/HitResult.h"
+#include "Engine/World.h"
+#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 
 USInteractionComponent::USInteractionComponent()
 {

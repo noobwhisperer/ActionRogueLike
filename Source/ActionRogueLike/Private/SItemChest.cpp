@@ -3,6 +3,8 @@
 
 #include "SItemChest.h"
 
+#include "Components/StaticMeshComponent.h"
+
 
 ASItemChest::ASItemChest()
 {
