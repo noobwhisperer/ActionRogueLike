@@ -17,11 +17,16 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
+
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnimMontage;
+
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> BlackHoleProjectialClass;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 
@@ -44,8 +49,10 @@ protected:
 	void MoveRight(float Value);
 
 	void PrimaryAttack();
-
 	void PrimaryAttack_TimeElapsed();
+
+	void BlackHoleAttack();
+	void BlackHoleAttack_TimeElapsed();
 
 	void PrimaryInteract();
 

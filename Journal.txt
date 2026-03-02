@@ -201,9 +201,16 @@ Commit : 6.4 : Camera Changes & First UMG
 
 	Lecture 6.5 : Assignment 2
 		- Fix projectile (in C++) ... easy, just do it.
+			+ note: he uses a Projectile Cannon from a previous lecture to demonstrate some vector math, but we don't
+				need to add this to our project.
 
 		- NOTE: found some bugs ! missing include files in all cpp classes ... probably hidden by Unity builds
 			+ track them all down by individually compiling each cpp
 
 Commit : 6.5 WIP - checkpoint code/data ... OBS sample , fixed projectile aiming but need a longer target ray
 
+		- Blackhole Projectile (LOL - I already created a Black Hole just to play around with the RadialForce Component to understand it.)
+			+ easy, but could use some tuning ... balance between pulling force and the projectile speed
+
+
+Commit : 6.5 WIP - checkpoint code/data ... completed Black Hole Projectile
