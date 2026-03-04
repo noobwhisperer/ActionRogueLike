@@ -70,51 +70,11 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-	// updated code for lecture 6.5 , adjusting for proper aim with camera "target"
-
-	// perform query to determine if we are near an "interactable" object  (and looking at it)
-
-	FHitResult OutHitResult;
-	FCollisionObjectQueryParams ObjectQueryParams;
-	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
-
-	//note - need to ignore "self" probably
-
-	FVector CameraLocation = CameraComp->GetComponentLocation();
-	FVector CameraDirection = CameraComp->GetForwardVector();
-	float TargetDistance = 3000.0f;
-
-	FVector TargetLocation = CameraLocation + TargetDistance * CameraDirection;
-
-	GetWorld()->LineTraceSingleByObjectType(OutHitResult, CameraLocation, TargetLocation, ObjectQueryParams);
-
-	if (OutHitResult.bBlockingHit)
-	{
-		TargetLocation = OutHitResult.ImpactPoint;
-	}
-
-	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-
-	FVector ProjectileForward = TargetLocation - RightHandLocation;
-	ProjectileForward.Normalize();
-
-	FRotator ProjectileRotation = FRotationMatrix::MakeFromXZ(ProjectileForward, FVector(0.0f,0.0f,1.0f)).Rotator();
-
-	FTransform SpawnTM = FTransform(ProjectileRotation, RightHandLocation);
+	FTransform SpawnTM = ComputeProjectileLaunchTransform();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
 	SpawnParams.Instigator = this;
-
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
-
-	// debugging : draw the query line and the projectile trajectory ... reveals "parallax"
-	const float Lifetime = 2.0f;
-	FColor LineColor = OutHitResult.bBlockingHit ? FColor::Green : FColor::Red;
-	DrawDebugLine(GetWorld(), (CameraLocation + 20.0f * CameraDirection), TargetLocation, LineColor, false, Lifetime, 0, 0.0f);
-
-	DrawDebugLine(GetWorld(), RightHandLocation, TargetLocation, FColor::Blue, false, Lifetime, 0, 0.0f);
 }
 
 void ASCharacter::BlackHoleAttack()
@@ -125,9 +85,39 @@ void ASCharacter::BlackHoleAttack()
 
 void ASCharacter::BlackHoleAttack_TimeElapsed()
 {
-	// updated code for lecture 6.5 , adjusting for proper aim with camera "target"
+	FTransform SpawnTM = ComputeProjectileLaunchTransform();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	GetWorld()->SpawnActor<AActor>(BlackHoleProjectialClass, SpawnTM, SpawnParams);
+}
 
-	// perform query to determine if we are near an "interactable" object  (and looking at it)
+void ASCharacter::TeleportAttack()
+{
+	PlayAnimMontage(AttackAnimMontage);
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::TeleportAttack_TimeElapsed, 0.2f);
+}
+
+void ASCharacter::TeleportAttack_TimeElapsed()
+{
+	FTransform SpawnTM = ComputeProjectileLaunchTransform();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	GetWorld()->SpawnActor<AActor>(TeleportProjectialClass, SpawnTM, SpawnParams);
+}
+
+
+void ASCharacter::PrimaryInteract()
+{
+	check(InteractionComp); //note: I cho
+
+	InteractionComp->PrimaryInteract();
+}
+
+FTransform ASCharacter::ComputeProjectileLaunchTransform() const
+{
+	// updated code for lecture 6.5 , adjusting for proper aim with camera "target"
 
 	FHitResult OutHitResult;
 	FCollisionObjectQueryParams ObjectQueryParams;
@@ -156,29 +146,22 @@ void ASCharacter::BlackHoleAttack_TimeElapsed()
 
 	FRotator ProjectileRotation = FRotationMatrix::MakeFromXZ(ProjectileForward, FVector(0.0f,0.0f,1.0f)).Rotator();
 
+
+
+	//temp hack - debugging
+	//RightHandLocation.Z = RightHandLocation.Z + 100.0;
+
 	FTransform SpawnTM = FTransform(ProjectileRotation, RightHandLocation);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	SpawnParams.Instigator = this;
-
-	GetWorld()->SpawnActor<AActor>(BlackHoleProjectialClass, SpawnTM, SpawnParams);
 
 	// debugging : draw the query line and the projectile trajectory ... reveals "parallax"
-	const float Lifetime = 2.0f;
-	FColor LineColor = OutHitResult.bBlockingHit ? FColor::Green : FColor::Red;
-	DrawDebugLine(GetWorld(), (CameraLocation + 20.0f * CameraDirection), TargetLocation, LineColor, false, Lifetime, 0, 0.0f);
+	//
+	// const float Lifetime = 2.0f;
+	// FColor LineColor = OutHitResult.bBlockingHit ? FColor::Green : FColor::Red;
+	// DrawDebugLine(GetWorld(), (CameraLocation + 20.0f * CameraDirection), TargetLocation, LineColor, false, Lifetime, 0, 0.0f);
+	// DrawDebugLine(GetWorld(), RightHandLocation, TargetLocation, FColor::Blue, false, Lifetime, 0, 0.0f);
 
-	DrawDebugLine(GetWorld(), RightHandLocation, TargetLocation, FColor::Blue, false, Lifetime, 0, 0.0f);
-}
-
-
-
-void ASCharacter::PrimaryInteract()
-{
-	check(InteractionComp); //note: I cho
-
-	InteractionComp->PrimaryInteract();
+	return SpawnTM;
 }
 
 void ASCharacter::Tick(float DeltaTime)
@@ -206,7 +189,6 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-
 	//TSH: Note - this is the old (deprecated) input approach. Implement as shown in Looman, but
 	//	replace with Enhanced Input approach once this is working.
 
@@ -217,8 +199,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("PrimaryAttack", IE_Pressed, this, &ASCharacter::PrimaryAttack);
-
 	PlayerInputComponent->BindAction("BlackHoleAttack", IE_Pressed, this, &ASCharacter::BlackHoleAttack);
+	PlayerInputComponent->BindAction("TeleportAttack", IE_Pressed, this, &ASCharacter::TeleportAttack);
 
 	PlayerInputComponent->BindAction("PrimaryInteract", IE_Pressed, this, &ASCharacter::PrimaryInteract);
 

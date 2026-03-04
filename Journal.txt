@@ -214,3 +214,22 @@ Commit : 6.5 WIP - checkpoint code/data ... OBS sample , fixed projectile aiming
 
 
 Commit : 6.5 WIP - checkpoint code/data ... completed Black Hole Projectile
+
+		- Dash/Teleport Ability in C++
+			+ NOTE: spent a few hours chasing down one nasty issue. The "Magic Projecile" works fine when spawned at tip of the player's
+				hand, but my new teleport projectile was just "sitting there" at the hand location. debugged - it is hitting the player's
+				hand immediately and "stopping". But why isn't the magic projectile ?? These both use the "Projectile" collision profile.
+				All collision settings are the same!
+
+				ANSWER - In the Blueprint of the the BeginPlay Event , we add the instigator ro the sphere component's "ignore" list.
+				This is another of those "hidden" steps that has collision settings being adjustable ALL OVER THE PROJECT ! It makes debugging
+				a nightmare.
+
+				I will add this step to the C++ code in the projectile base class ... seems we shall always want to do this.
+
+
+		- checkpointing WIP : Teleport Projectile "fleshed out" ... still need to teleport the player and spawn the teleport VFX
+
+Commit : 6.5 WIP - checkpointing WIP : Teleport Projectile
+
+
