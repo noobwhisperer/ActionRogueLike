@@ -4,12 +4,16 @@
 
 #include "DrawDebugHelpers.h"
 #include "SInteractionComponent.h"
+#include "SAttributeComponent.h"
 #include "TimerManager.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+
+
+
 
 // NOTE: UE COORDINATE SYSTEM (LEFT HANDED)
 //	X - Forward (red)
@@ -28,6 +32,7 @@ ASCharacter::ASCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -70,6 +75,8 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
+	if(!ensure(ProjectileClass)) return;
+
 	FTransform SpawnTM = ComputeProjectileLaunchTransform();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -85,6 +92,8 @@ void ASCharacter::BlackHoleAttack()
 
 void ASCharacter::BlackHoleAttack_TimeElapsed()
 {
+	if(!ensure(BlackHoleProjectialClass)) return;
+
 	FTransform SpawnTM = ComputeProjectileLaunchTransform();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -100,6 +109,8 @@ void ASCharacter::TeleportAttack()
 
 void ASCharacter::TeleportAttack_TimeElapsed()
 {
+	if(!ensure(TeleportProjectialClass)) return;
+
 	FTransform SpawnTM = ComputeProjectileLaunchTransform();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;

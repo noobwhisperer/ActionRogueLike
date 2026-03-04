@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraComponent.h"
+#include "SAttributeComponent.h"
 
 ASProjectile::ASProjectile()
 {
@@ -14,6 +15,8 @@ ASProjectile::ASProjectile()
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
 	SphereComp->SetCollisionProfileName("Projectile");
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASProjectile::OnActorOverlap);
+
 
 	RootComponent = SphereComp;
 
@@ -37,6 +40,19 @@ void ASProjectile::BeginPlay()
 void ASProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
+void ASProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor)
+	{
+		USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
+
+		if( AttributeComp)
+		{
+			AttributeComp->ApplyHealthChange(-20.0f);
+
+			Destroy();	// Hmmm - I'm not sure this is a good idea, but I'll see what he shows us next
+		}
+	}
+}

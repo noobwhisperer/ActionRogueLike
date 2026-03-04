@@ -240,3 +240,39 @@ Commit : 6.5 WIP - checkpointing WIP : Teleport Projectile
 			+ overall features could use refinement, but this is good enough for now I think.
 
 Commit : 6.5 All Projectiles completed
+
+	Lecture 6.6 : He talks through the built-in UE5 ensure and check MACROS
+
+Lecture 7.1 Attribute Component
+	- create a new ActorComponent called SAttributeComponent
+	- add a property for Health
+	- use EditDefaultsOnly and BlueprintReadOnly , place variable in "protected" C++
+		+ this is how to define a property that can be edited in the Editor but not changed at "runtime" from blueprints. We will
+			add methods that can make in changes to this property (e.g. TakeDamage)
+	- Add method ApplyHealthChange
+		+ we'll eventually make this more complex and return true/false, for now always true
+	- add an SAttributeComponent to our C++ SCharacter class
+	- add code to "apply damage" to the ASMagicalProjectile class
+		+ in ctor, we bind a callback for "OnComponentBeginOverlap" to our SphereComp ! Note - we must mark our function with UFUNCTION() to
+			be able to bind to it - even in the ctor with C++ code
+
+	- Collision Note: when blocking collisions are triggered, it does not ALSO trigger the overlaps !
+		+ we will adjust the collision profile so we can use overlap, which will allow us to check what we have overlapped and possibly
+			ignore it, for example if it is a teammate's player character.
+
+	- 16:50 note: His collision set up appears to be same as mine at this point, however he does not seem to have the code in base projectile class
+		to ignore Instigator
+
+	- change collision profile for projectiles to:
+
+		WorldStatic		-	Block
+		WorldDynamic 	- Overlap
+		Pawn 			- Overlap
+		PhysicsBody		-   Block
+		Vehicle			-   Block
+		Destructible	-   Block
+
+	- Hmmm, he seems to be actually keeping and using that "turret" he created in a previous lecture. I thought it was just a temporary example.
+		+ circling back to that spot and adding a turret to my scene
+
+Lecture 7.2 UMG with Data Bindings
