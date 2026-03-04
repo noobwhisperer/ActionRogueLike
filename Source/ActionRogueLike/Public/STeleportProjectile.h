@@ -10,7 +10,6 @@
 enum class EProjectileState
 {
 	Unknown = 0
-	, BeginPlay
 	, InitialMovement
 	, WaitingToTeleportInstigator
 };
@@ -28,11 +27,14 @@ class ACTIONROGUELIKE_API ASTeleportProjectile : public ASProjectile
 public:
 	ASTeleportProjectile();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Teleport Projectile")
 	float MotionTimer = 0.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Teleport Projectile")
 	float TeleportTimer = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UNiagaraComponent* TeleportNiagaraComp;
 
 protected:
 	virtual void BeginPlay() override;

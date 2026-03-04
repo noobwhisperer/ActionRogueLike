@@ -30,10 +30,7 @@ void ASProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	// code to ignore collision for the APawn that spawned us
-
-	//APawn* Instigator = GetInstigator();
 	SphereComp->IgnoreActorWhenMoving(GetInstigator(), true);
 }
 

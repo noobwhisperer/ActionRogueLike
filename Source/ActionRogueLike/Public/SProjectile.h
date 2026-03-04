@@ -15,7 +15,7 @@ class ACTIONROGUELIKE_API ASProjectile : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
 
 	ASProjectile();
 
@@ -27,6 +27,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* NiagaraComp;
+
+	UPROPERTY(EditAnywhere, Category = "SProjectile")
+	bool bShowDebugGraphics = false;
 
 protected:
 

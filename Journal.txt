@@ -233,3 +233,10 @@ Commit : 6.5 WIP - checkpoint code/data ... completed Black Hole Projectile
 Commit : 6.5 WIP - checkpointing WIP : Teleport Projectile
 
 
+		- completed the Teleport Projectile.
+			+ works as shown in the video for the most part
+			+ I use Niagara VFX, and not sure if there are better ones for this ... they may differ from the old system VFX he uses
+			+ teleport fails "silently" for case where there's not room to perform the teleport. I can detect this with debug graphics
+			+ overall features could use refinement, but this is good enough for now I think.
+
+Commit : 6.5 All Projectiles completed
