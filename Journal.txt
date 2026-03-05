@@ -327,3 +327,122 @@ Lecture 7.3 Event-based principles with UMG
 
 
 Commit : 7.3 Event-based principles with UMG
+
+Side Quest: Get Tom Looman's project comiling and running with my engine
+
+	- cloned his repository
+		+ navigated the CL history and found location I want to examine
+		+ checked out that CL location
+	- there's no Visual Studio project !?
+		+ generating the project appears to be a little tricky for me with my custom version of the UE5 engine.
+		+ hmmm - one "back door" way I've done it is to just try opening the .uproject after launching my UE5.6 Editor (from the Editor)
+			> This encouraged me to create a copy, and it seemed to generate the VS project files and open them.
+
+
+		+ trying another way... copy the whole folder (for safety) ,
+			then copy the UE5/GenerateProjectFile.bat to this new local folder,
+			then run it there from powershell script :
+
+			X - doesn't quite work :
+
+				PS E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-5.6-teddy-copy> .\GenerateProjectFiles.bat
+				GenerateProjectFiles ERROR: The batch file does not appear to be located in the root UE directory.  This script must be run from within that directory.
+				Press any key to continue . . .
+		+ try running the batch file from the engine folder, but passing arguments pointing to my .uproject :
+			? seems to be working ?
+
+				PS E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-5.6-teddy-copy>
+				PS E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-5.6-teddy-copy> E:\UE5\GenerateProjectFiles.bat "E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-5.6-teddy-copy\ActionRoguelike.uproject" -Game
+				Setting up Unreal Engine project files...
+				Using bundled DotNet SDK version: 8.0.300 win-x64
+				Log file: E:\UE5\Engine\Programs\UnrealBuildTool\Log_GPF.txt
+
+				Some Platforms were skipped due to invalid SDK setup: Mac, IOS, Android, Linux, LinuxArm64, TVOS.
+				See the log file for detailed information
+
+
+				Generating VisualStudio project files:
+				Discovering modules, targets and source code for project...
+				Adding projects for all targets...
+				Adding projects for all targets took 1.01s
+				Adding projects for all game projects took 0.00s
+				Adding projects for all modules took 0.33s
+				Compiling Rules Assemblies 100%
+				Creating Build Targets
+				Warning: [Upgrade]
+				Warning: [Upgrade] Using backward-compatible build settings. The latest version of UE sets the following values by default, which may require code changes:
+				Warning: [Upgrade]     bLegacyParentIncludePaths = false               => Omits module parent folders from include paths to reduce compiler command line length. (Previously: true).
+				Warning: [Upgrade]     CppStandard = CppStandardVersion.Default        => Updates C++ Standard to C++20 (Previously: CppStandardVersion.Cpp17).
+				Warning: [Upgrade]     WindowsPlatform.bStrictConformanceMode = true   => Updates MSVC strict conformance mode to true (Previously: false).
+				Warning: [Upgrade]     bValidateFormatStrings = true                   => Enables compile-time validation of strings+args passed to UE_LOG. (Previously: false).
+				Warning: [Upgrade] Suppress this message by setting 'DefaultBuildSettings = BuildSettingsVersion.V5;' in ActionRoguelikeEditor.Target.cs, and explicitly overriding settings that differ from the new defaults.
+				Warning: [Upgrade]
+				Warning: [Upgrade]
+				Warning: [Upgrade] Using backward-compatible include order. The latest version of UE has changed the order of includes, which may require code changes. The current setting is:
+				Warning: [Upgrade]     IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3
+				Warning: [Upgrade] Suppress this message by setting 'IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_6;' in ActionRoguelikeEditor.Target.cs.
+				Warning: [Upgrade] Alternatively you can set this to 'EngineIncludeOrderVersion.Latest' to always use the latest include order. This will potentially cause compile errors when integrating new versions of the engine.
+				Warning: [Upgrade]
+				Warning: [Upgrade]
+				Warning: [Upgrade] The latest version of UE no longer supports CppStandardVersion.Cpp17 which may require code changes.
+				Warning: [Upgrade] Suppress this message by setting 'CppStandard = CppStandardVersion.Cpp20;' in ActionRoguelikeEditor.Target.cs.
+				Warning: [Upgrade]
+				Exception while creating build target for ActionRoguelikeEditor: ActionRoguelikeEditor modifies the values of properties: [ bStrictConformanceMode: False != True ]. This is not allowed, as ActionRoguelikeEditor has build products in common with UnrealEditor.
+				Remove the modified setting, change ActionRoguelikeEditor to use a unique build environment by setting 'BuildEnvironment = TargetBuildEnvironment.Unique;' in the ActionRoguelikeEditorTarget constructor, or set bOverrideBuildEnvironment = true to force this setting on.
+				Creating Build Targets 100%
+				Creating Build Targets took 1.49s
+				Binding IntelliSense data... 100%
+				Binding IntelliSense data took 1.84s
+				Writing project files...
+				Available arm64 toolchains (1):
+				 * C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207
+				    (Family=14.44.35207, FamilyRank=1, Version=14.44.35217, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=arm64)
+				Visual Studio 2022 compiler version 14.44.35217 is not a preferred version. Please use the latest preferred version 14.38.33130
+				Writing project files... 100%
+				Writing project files took 1.58s
+
+				Generating QueryTargets data for editor...
+				Compiling Rules Assemblies 100%
+				Writing Query Target Info 100%
+				Generating QueryTargets data for editor took 0.19s
+
+				Result: Succeeded
+				Total execution time: 8.24 seconds
+				PS E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-5.6-teddy-copy>
+
+	- COOL ... so I have a project now, but it doesn't compile... investigating compiler issues (e.g. might be UE4 vs UE5 issues)
+
+		+ modified the C# build scripts ActionRoguelikeEditor.Target.cs and ActionRoguelike.Target.cs
+			> constructor contents replaced by my constructor contents from my project ... this will
+				make them compatible with my UE5.6 custom engine:
+
+			public class ActionRogueLikeEditorTarget : TargetRules
+			{
+				public ActionRogueLikeEditorTarget( TargetInfo Target) : base(Target)
+				{
+					Type = TargetType.Editor;
+					DefaultBuildSettings = BuildSettingsVersion.V5;
+					IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_6;
+					ExtraModuleNames.Add("ActionRogueLike");
+				}
+			}				
+
+	Running Tom Looman's code for check-in : "Lecture 6 results (logging, asserts, crosshair, look-at example)"
+		+ we hit the ensure he also hit in the video on line 100 of : ASCharacter
+
+			void ASCharacter::PrimaryAttack_TimeElapsed()
+			{
+				if (ensure(ProjectileClass))
+				{
+		+ fix it by binding the projectile class type to the BP , and re-run it.
+		+ ok - running now as expected.
+
+		+ NOTE: HE HAS SAME ISSUE - PROJECTILES NEVER EXPIRE (unless they hit something). I'll leave my code the same as his for now,
+			we probably fix this later (or implement projectile pools)
+
+END SIDE-QUEST
+
+
+
+
+
