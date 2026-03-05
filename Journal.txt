@@ -277,7 +277,6 @@ Lecture 7.1 Attribute Component
 
 Commit : 7.1 Attribute Component
 
-
 Lecture 7.2 UMG with Data Bindings
 
 	4:33 - Property Binding
@@ -295,3 +294,36 @@ Lecture 7.2 UMG with Data Bindings
 		hit something. Otherwise to go off into the distance and live "forever".
 
 Commit : 7.2 UMG with Data Bindings
+
+Lecture 7.3 Event-based principles with UMG
+
+	- we can make our own events
+
+	- make our own event for the health update
+
+	- using BlueprintAssignable makes our event appear in BP and we can bind "BP code" to it !
+
+	9:30 - this is where he binds a "BP callback" to the OnHealthChanged event. It's a little messy IMO since it happens
+		in the construction event and then creates a node for the "BP Callback" where we attach the "BP code".
+		Why don't I like this?
+		Because the callback BP code is executed when the event is triggered, but this BP graph "kinda" looks like this stuff
+		gets exectuted at construction. Only the binding happens at construction.
+
+	13:15 - he shows us how to get a classes "defaults" in BP. This allows us to find the "max health"
+
+	15:40 - Event Pre-Construct runs even in the designer . Event Construct runs at time the object is instantiated.
+
+
+
+
+	Aside: quick estimate for time required to finish this course :
+
+		Lecture 	Video Time
+		8			1 hr
+		9			1 hr
+		10 			1 hr
+		11			1 hr
+		.... approximately 1 hour of video per lecture, so ~ 20 hours of video left !
+
+
+Commit : 7.3 Event-based principles with UMG
