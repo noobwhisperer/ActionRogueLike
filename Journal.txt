@@ -443,6 +443,12 @@ Side Quest: Get Tom Looman's project comiling and running with my engine
 END SIDE-QUEST
 
 
+Lecture 7.4 : Animating UMG Widgets
+
+	BP changes to implement an animation when the health bar changes ... easy peasy.
+	
+
+
 
 
 
