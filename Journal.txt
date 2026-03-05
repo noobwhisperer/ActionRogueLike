@@ -275,4 +275,23 @@ Lecture 7.1 Attribute Component
 	- Hmmm, he seems to be actually keeping and using that "turret" he created in a previous lecture. I thought it was just a temporary example.
 		+ circling back to that spot and adding a turret to my scene
 
+Commit : 7.1 Attribute Component
+
+
 Lecture 7.2 UMG with Data Bindings
+
+	4:33 - Property Binding
+		- This is how data in UMG elements is binded to functions that update the data
+
+	5:45 - The widget is created in the PlayerCharacter BP's "Event BeginPlay"
+		- This is where we'll also be able to bind the specific PlayerCharacter to their widget
+
+	8:10 - TEXT versus STRING versus NAME
+		- FString - used mostly for debugging. mutable
+		- FName - hashed for fast comparisons, used for gameplay logic, immutable
+		- FText - Used for UI display, easily localized
+
+	- NOTE: Projectile "leakage" ... he doesn't mention it, and maybe his version is not doing this, but my Magic Projectiles only get destroyed if they
+		hit something. Otherwise to go off into the distance and live "forever".
+
+Commit : 7.2 UMG with Data Bindings
