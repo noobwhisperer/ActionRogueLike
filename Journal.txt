@@ -473,4 +473,11 @@ Lecture 7.5 : Dealing Damage with Attributes
 commit : Lecture 7.5 : Dealing Damage with Attributes
 
 
+Lecture 8.1 : Intro & Projectile Collision Fix
+	- He needs to fix his projectile because it is hitting the player. He does this by added code to "filter" the
+		instigator during the OnActorOverlap. WE DO NOT NEED THIS - since I already added IgnoreActorWhenMoving for
+		the instigator in the Projectile base class BeginPlay
+	- Note: he's a little farther behind somehow - his project has no TeleportProjectile or Projectile base class here!
+	
 
+commit : Lecture 8.1 : Intro & Projectile Collision Fix
