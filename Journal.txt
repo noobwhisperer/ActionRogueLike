@@ -453,19 +453,20 @@ Lecture 7.5 : Dealing Damage with Attributes
 
 	Course design is slightly different!
 
-	Note: There are some ddifferences between the Tom Looman result at end of Lecture 7 versus my results
-
+	Course Design (up to end of Lecture 7):
 		Bumping into the Barrel causes it to explode.
 		Hitting the Barrel with magic projectiles does NOT cause it to explode
 		When you bump into the Barrel and it explodes, damage is only applied to the Character that hit the barrel
+		Neighboring Actors may "feel" the impulse and move radially, but receive no damage
 
 	My Design:
 
-		Bumping into the Barrel does NOT cause it to explode... just the usual physcis
+		Bumping into the Barrel does NOT cause it to explode... just the usual physics
 		Hitting the Barrel with magic projectiles DOES cause it to explode
 		When the Barrel explodes, damage is applied to all actors that are affected by the Radial Force Component
-		So, damage is applied to the Character if he is standing close to the barrel and the turret cannon hits the barrel
-		Damage is applied by a custom SRadialForceComponent that is placed onto the barrel (derived from URadialForceComponent)
+		So, damage is applied to a Character  standing close to the barrel if the turret cannon hits the barrel
+		Damage is applied by a custom SRadialForceComponent placed onto the barrel 
+			> derived from URadialForceComponent
 			> overrides FireImpulse , collects unique SAttributeComponents in the overlap query and adjusts health
 			> RadialForceDamage value is exposed as a property
 
