@@ -478,6 +478,31 @@ Lecture 8.1 : Intro & Projectile Collision Fix
 		instigator during the OnActorOverlap. WE DO NOT NEED THIS - since I already added IgnoreActorWhenMoving for
 		the instigator in the Projectile base class BeginPlay
 	- Note: he's a little farther behind somehow - his project has no TeleportProjectile or Projectile base class here!
-	
+
 
 commit : Lecture 8.1 : Intro & Projectile Collision Fix
+
+Lecture 8.2 : Material Basics
+
+	- create a simple PBR material and play with the inputs
+	- create a Material Instance
+		> this is an "instance" copy of a Material (I think it can have it's own bespoke values for parameters ??)
+	- so the idea is you can create one Material and many Material Instances from it. The Material is kind of like
+		a "class definition" and the Material Instance is like an "instance of that class type".
+
+		?? I have some questions about the details. Are the parameters constant within a material instance or updatable
+			every Tick at runtime (e.g. shader uniforms that can be sent to GPU each tick? or constants compiled into
+			the shaders ... so different values means a different compiled shader.)
+	- all the functionality comes from the Material ... Material Instances can only tweak parameter values
+	- lots of nodes for debugging : DebugScalarValues
+	- he chats about the "usual" shader debugging tricks, but with context for the UE Materials
+
+	- creates an example showing how to drive the material parameters from a regular BP ! (e.g. each tick, ar runtime)
+
+	19:40 : He States: driving the color change in our example from WITHIN the material is more efficient since we don't have
+		to send the parameter from the CPU to the GPU.
+
+		?? I challenge this... Somebody has to send the time to the GPU, don't they ? (e.g. maybe when we do it in the tick it gets sent twice?)
+
+
+commit : Lecture 8.2 : Material Basics
