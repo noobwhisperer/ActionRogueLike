@@ -7,7 +7,7 @@
 #include "SBarrel.generated.h"
 
 class UStaticMeshComponent;
-class URadialForceComponent;
+class USRadialForceComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASBarrel : public AActor
@@ -31,7 +31,7 @@ protected:
 	/// RadialForce triggered by explosion when hit by projectile
 	/// </summary>
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	URadialForceComponent* ExplosionForceComp;
+	USRadialForceComponent* ExplosionForceComp;
 
 	virtual void BeginPlay() override;
 

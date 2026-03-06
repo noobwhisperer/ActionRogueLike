@@ -5,7 +5,7 @@
 #include "SMagicProjectile.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
-#include "PhysicsEngine/RadialForceComponent.h"
+#include "SRadialForceComponent.h"
 
 ASBarrel::ASBarrel()
 {
@@ -15,11 +15,12 @@ ASBarrel::ASBarrel()
     RootComponent = BarrelMeshComp;
 
     
-    ExplosionForceComp = CreateDefaultSubobject<URadialForceComponent>(TEXT("RadialForceComp"));
+    ExplosionForceComp = CreateDefaultSubobject<USRadialForceComponent>(TEXT("RadialForceComp"));
     ExplosionForceComp->SetupAttachment(RootComponent);
 
     // configure the radial force - defaults
     ExplosionForceComp->Radius = 1000.0f;
+    ExplosionForceComp->RadialForceDamage = 20.0f;
     ExplosionForceComp->ImpulseStrength = 200000.0f;
     ExplosionForceComp->bImpulseVelChange = false;
     ExplosionForceComp->bAutoActivate = false;
