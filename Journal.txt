@@ -504,16 +504,13 @@ Lecture 8.2 : Material Basics
 
 		?? I challenge this... Somebody has to send the time to the GPU, don't they ? (e.g. maybe when we do it in the tick it gets sent twice?)
 
-
 commit : Lecture 8.2 : Material Basics
 
 Lecture 8.3 : Hit Flash Material - Driving Material Parameters from C++
 
 	- more easy material stuff ... shows how to push shader uniforms to the GPU from the CPU for a material
 
-
 commit : Lecture 8.3 : Hit Flash Material - Driving Material Parameters from C++
-
 
 Lecture 8.4 : Simple Dissolve Materials
 
@@ -555,6 +552,15 @@ Lecture 8.5 : Creating Re-usable Material Functions
 		Being able to freely move and change all these things in UE makes it easy to quickly modify stuff, but also easy to introduce bugs since there's so many places to override things.
 		Cheers!
 
-		
 commit : Lecture 8.5 : Creating Re-usable Material Functions
 
+Lecture 8.6 : Materials for User Interface (UMG)
+
+	- create a new material to use for the HealthBar
+	- choose "User Interface" for the Material Domain
+	- UV mapping stuff... no problem since I already know all about it. It's complex
+		so not surprised he chooses not to spend to much time on it here.
+	- clever use of gradient to create the health bar!
+	- on a UI widget Image, set the material using Appearance->Brush->Image (NOT INTUITIVE REALLY !!)
+		+ you can set a texture here OR a material ... their UI language is pretty conflating
+		
