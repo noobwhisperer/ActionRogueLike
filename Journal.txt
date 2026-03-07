@@ -506,3 +506,16 @@ Lecture 8.2 : Material Basics
 
 
 commit : Lecture 8.2 : Material Basics
+
+Lecture 8.3 : Hit Flash Material - Driving Material Parameters from C++
+
+	- more easy material stuff ... shows how to push shader uniforms to the GPU from the CPU for a material
+
+
+commit : Lecture 8.3 : Hit Flash Material - Driving Material Parameters from C++
+
+
+Lecture 8.4 : Simple Dissolve Materials
+
+
+

@@ -12,9 +12,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
-
-
-
 // NOTE: UE COORDINATE SYSTEM (LEFT HANDED)
 //	X - Forward (red)
 //	Y - Right (green)
