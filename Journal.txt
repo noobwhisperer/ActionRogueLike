@@ -517,5 +517,44 @@ commit : Lecture 8.3 : Hit Flash Material - Driving Material Parameters from C++
 
 Lecture 8.4 : Simple Dissolve Materials
 
+	- create a material that uses opacity
+	- note: the properties in this material editor are "ALL OVER THE PLACE" ... some irrelevant properties still appear to be showing even when the
+		blend mode makes them moot.
 
+	- dynamically adjusting the dissolve effect (could do this from code as well of course)
+	- lecture stops abruptly as he was mid-sentence
+
+Lecture 8.5 : Creating Re-usable Material Functions
+
+	- Material functions can be shared by many materials
+		+ looks like "wrappers" around chunks of shader code (to me)
+
+	- We need to check "Expose to Library" checkbox so we can use this elsewhere!
+
+	- replace the chunk of code in our M_HitFlashDemo material with this material function MF_HitFlashDemo
+	- note: already another MF_HitFlashDemo from the example content ... don't confuse this with ours.
+
+	- I posted comment to Tom's site:
+
+		Hi Tom -
+
+		I'm trying to make sure I have the right understanding about some of hidden details not mentioned in this lecture. Please verify/clarify my understanding on the following points:
+
+		1. The parameters we have set up in the materials/material-instances/material-functions are GLOBAL (e.g. not scoped to a particular material or instance), true?
+		2. Clicking the checkboxes and modifying them within an "instance" seems to set the value to your the specified value before the shader runs, true?
+		3. If you do not "checkbox" it within an instance it will use the GLOBAL default value, so it's like an override, true?
+		4. It's GLOBAL because we actually moved the HitFlashSpeed parameter INTO the Material Function in this lecture without any scope change consequences.
+		5. I suspect we could set HitFlashSpeed from C++code in a similar way to how we are setting the TimeToHit:
+
+			MeshComp->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
+			MeshComp->SetScalarParameterValueOnMaterials("HitFlashSpeed", 2.0);
+
+		6. This C++ syntax makes it seem as though we are setting a local variable that is defined for each MeshComp instance. But I suspect we are actually just setting the "global" value for the material parameter before the corresponding MeshComp's draw call, then setting those global parameters back to the "defaults" afterward (so successive draw calls would get the defaults unless they also override them)
+
+		Thanks for any and all clarifications :-) !
+		Being able to freely move and change all these things in UE makes it easy to quickly modify stuff, but also easy to introduce bugs since there's so many places to override things.
+		Cheers!
+
+		
+commit : Lecture 8.5 : Creating Re-usable Material Functions
 
