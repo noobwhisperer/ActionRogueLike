@@ -12,10 +12,6 @@
 ASDashProjectile::ASDashProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	// TeleportNiagaraComp = CreateDefaultSubobject<UNiagaraComponent>("TeleportNiagaraComp");
-	// TeleportNiagaraComp->SetupAttachment(SphereComp);
-	// TeleportNiagaraComp->Activate(false);
 }
 
 void ASDashProjectile::BeginPlay()
@@ -25,18 +21,18 @@ void ASDashProjectile::BeginPlay()
 	GetWorldTimerManager().SetTimer(TimerHandle_StateTimer, this, &ASDashProjectile::Explode, DetonationTimer);
 }
 
-
 void ASDashProjectile::Explode_Implementation()
 {
-	// Clear timer if the Explode was already called through another source like OnActorHit
+	// clear timer if the Explode was already called through another source like OnActorHit
 	GetWorldTimerManager().ClearTimer(TimerHandle_StateTimer);
 
 	if (ImpactVfx)
 	{
-		// Spawn the Niagara effect at the projectile's location and rotation
+		// spawn the Niagara ImpactVfx effect at the projectile's location and rotation
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactVfx, GetActorLocation(), GetActorRotation());
 	}
 
+	// deactivate the projectile's movement and collision, but keep the projectile alive until we teleport the instigator
 	if (EffectComp)
 	{
 		EffectComp->Deactivate();
@@ -47,34 +43,7 @@ void ASDashProjectile::Explode_Implementation()
 
 	ProjectileState = EProjectileState::WaitingToTeleportInstigator;
 	GetWorldTimerManager().SetTimer(TimerHandle_StateTimer, this, &ASDashProjectile::TeleportInstigator, TeleportTimer);
-
-
-	//Tom Looman stuff :
-	//
-	// FTimerHandle TimerHandle_DelayedTeleport;
-	// GetWorldTimerManager().SetTimer(TimerHandle_DelayedTeleport, this, &ASDashProjectile::TeleportInstigator, TeleportDelay);
-	//
-	// // Skip base implementation as it will destroy actor (we need to stay alive a bit longer to finish the 2nd timer)
-	// //Super::Explode_Implementation();
 }
-
-
-// void ASDashProjectile::ExplodeProjectile()
-// {
-// 	// set movement velocity to "zero"
-//
-// 	MoveComp->Velocity *= 0.0;
-// 	//note: seems to not be necessary since the blocking collision stops the projectile anyway
-//
-// 	// trigger explode/teleport VFX
-//
-// 	TeleportNiagaraComp->Activate(true);
-//
-// 	// start teleport timer
-//
-// 	ProjectileState = EProjectileState::WaitingToTeleportInstigator;
-// 	GetWorldTimerManager().SetTimer(TimerHandle_StateTimer, this, &ASDashProjectile::TeleportInstigator, TeleportTimer);
-// }
 
 void ASDashProjectile::TeleportInstigator()
 {
@@ -89,8 +58,7 @@ void ASDashProjectile::TeleportInstigator()
 		}
 	}
 
-	//destroy ourselves
-
+	//destroy ourselves (note: he left this out, but I'm sure we need this)
 	Destroy();
 }
 

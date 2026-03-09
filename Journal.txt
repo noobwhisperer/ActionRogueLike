@@ -632,4 +632,10 @@ Lecture 9.1 : Assignment 2 Solution Review
 
 commit : 9.1 : Assignment 2 Solution Review - Refactor and Cleanup
 
+Lecture 9.2 : Creating Sound Cues
+	- easy - no additional notes
 
+Lecture 9.3 : Animation Blueprints & Player Death
+	- easy - no additional notes
+
+commit : 9.3 : Animation Blueprints & Player Death

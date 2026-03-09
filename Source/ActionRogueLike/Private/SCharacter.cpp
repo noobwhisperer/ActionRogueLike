@@ -36,6 +36,30 @@ ASCharacter::ASCharacter()
 	bUseControllerRotationYaw = false;
 }
 
+
+void ASCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	AttributeComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
+}
+
+void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
+{
+	if(NewHealth < 0.5f && Delta < 0.5f)
+	{
+		//dead
+
+		//note: This impl will also keep disabling the input when a dead player takes damage (e.g. laying
+		//	on the floor and getting spammed from the projectile cannon, unless we do more to properly implement
+		//	a character state machine
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		DisableInput(PC);
+	}
+}
+
+
+
 void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -83,39 +107,16 @@ void ASCharacter::TeleportAttack()
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
 	SpawnProjectile(ProjectileClass);
-
-	// if (!ensure(ProjectileClass)) return;
-	//
-	// FTransform SpawnTM = ComputeProjectileLaunchTransform();
-	// FActorSpawnParameters SpawnParams;
-	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	// SpawnParams.Instigator = this;
-	// GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
 void ASCharacter::BlackHoleAttack_TimeElapsed()
 {
 	SpawnProjectile(BlackHoleProjectialClass);
-
-	// if (!ensure(BlackHoleProjectialClass)) return;
-	//
-	// FTransform SpawnTM = ComputeProjectileLaunchTransform();
-	// FActorSpawnParameters SpawnParams;
-	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	// SpawnParams.Instigator = this;
-	// GetWorld()->SpawnActor<AActor>(BlackHoleProjectialClass, SpawnTM, SpawnParams);
 }
 
 void ASCharacter::TeleportAttack_TimeElapsed()
 {
 	SpawnProjectile(TeleportProjectialClass);
-	//
-	// if (!ensure(TeleportProjectialClass)) return;
-	// FTransform SpawnTM = ComputeProjectileLaunchTransform();
-	// FActorSpawnParameters SpawnParams;
-	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	// SpawnParams.Instigator = this;
-	// GetWorld()->SpawnActor<AActor>(TeleportProjectialClass, SpawnTM, SpawnParams);
 }
 
 void ASCharacter::PrimaryInteract()
@@ -202,6 +203,7 @@ void ASCharacter::DebugDrawRotationViz() const
 	// Draw 'Controller' Rotation ('PlayerController' that 'possessed' this character)
 	DrawDebugDirectionalArrow(GetWorld(), LineStart, ControllerDirection_LineEnd, DrawScale, FColor::Green, false, 0.0f, 0, Thickness);
 }
+
 
 void ASCharacter::Tick(float DeltaTime)
 {

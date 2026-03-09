@@ -58,6 +58,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USAttributeComponent* AttributeComp;
 
+		
+	virtual void PostInitializeComponents() override;
+
+
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
+
+
+
 	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);
