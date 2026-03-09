@@ -31,7 +31,6 @@ ASCharacter::ASCharacter()
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
 	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 
-
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	bUseControllerRotationYaw = false;
@@ -47,7 +46,6 @@ void ASCharacter::MoveForward(float Value)
 	FRotator ControlRot = GetControlRotation();
 	ControlRot.Pitch = 0.0f;
 	ControlRot.Roll = 0.0f;
-
 
 	AddMovementInput(ControlRot.Vector(), Value);
 }
@@ -67,54 +65,58 @@ void ASCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(AttackAnimMontage);
 
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, 0.2f);
-}
-
-void ASCharacter::PrimaryAttack_TimeElapsed()
-{
-	if(!ensure(ProjectileClass)) return;
-
-	FTransform SpawnTM = ComputeProjectileLaunchTransform();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, AttackAnimDelay);
 }
 
 void ASCharacter::BlackHoleAttack()
 {
 	PlayAnimMontage(AttackAnimMontage);
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::BlackHoleAttack_TimeElapsed, 0.2f);
-}
-
-void ASCharacter::BlackHoleAttack_TimeElapsed()
-{
-	if(!ensure(BlackHoleProjectialClass)) return;
-
-	FTransform SpawnTM = ComputeProjectileLaunchTransform();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	GetWorld()->SpawnActor<AActor>(BlackHoleProjectialClass, SpawnTM, SpawnParams);
+	GetWorldTimerManager().SetTimer(TimerHandle_BlackHoleAttack, this, &ASCharacter::BlackHoleAttack_TimeElapsed, AttackAnimDelay);
 }
 
 void ASCharacter::TeleportAttack()
 {
 	PlayAnimMontage(AttackAnimMontage);
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::TeleportAttack_TimeElapsed, 0.2f);
+	GetWorldTimerManager().SetTimer(TimerHandle_DashAttack, this, &ASCharacter::TeleportAttack_TimeElapsed, AttackAnimDelay);
+}
+
+void ASCharacter::PrimaryAttack_TimeElapsed()
+{
+	SpawnProjectile(ProjectileClass);
+
+	// if (!ensure(ProjectileClass)) return;
+	//
+	// FTransform SpawnTM = ComputeProjectileLaunchTransform();
+	// FActorSpawnParameters SpawnParams;
+	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	// SpawnParams.Instigator = this;
+	// GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+}
+
+void ASCharacter::BlackHoleAttack_TimeElapsed()
+{
+	SpawnProjectile(BlackHoleProjectialClass);
+
+	// if (!ensure(BlackHoleProjectialClass)) return;
+	//
+	// FTransform SpawnTM = ComputeProjectileLaunchTransform();
+	// FActorSpawnParameters SpawnParams;
+	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	// SpawnParams.Instigator = this;
+	// GetWorld()->SpawnActor<AActor>(BlackHoleProjectialClass, SpawnTM, SpawnParams);
 }
 
 void ASCharacter::TeleportAttack_TimeElapsed()
 {
-	if(!ensure(TeleportProjectialClass)) return;
-
-	FTransform SpawnTM = ComputeProjectileLaunchTransform();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	GetWorld()->SpawnActor<AActor>(TeleportProjectialClass, SpawnTM, SpawnParams);
+	SpawnProjectile(TeleportProjectialClass);
+	//
+	// if (!ensure(TeleportProjectialClass)) return;
+	// FTransform SpawnTM = ComputeProjectileLaunchTransform();
+	// FActorSpawnParameters SpawnParams;
+	// SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	// SpawnParams.Instigator = this;
+	// GetWorld()->SpawnActor<AActor>(TeleportProjectialClass, SpawnTM, SpawnParams);
 }
-
 
 void ASCharacter::PrimaryInteract()
 {
@@ -125,22 +127,23 @@ void ASCharacter::PrimaryInteract()
 
 FTransform ASCharacter::ComputeProjectileLaunchTransform() const
 {
-	// updated code for lecture 6.5 , adjusting for proper aim with camera "target"
-
 	FHitResult OutHitResult;
+
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
 
-	//note - need to ignore "self" probably
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
 
 	FVector CameraLocation = CameraComp->GetComponentLocation();
 	FVector CameraDirection = CameraComp->GetForwardVector();
-	float TargetDistance = 3000.0f;
+	//	float TargetDistance = 3000.0f;
 
 	FVector TargetLocation = CameraLocation + TargetDistance * CameraDirection;
 
-	GetWorld()->LineTraceSingleByObjectType(OutHitResult, CameraLocation, TargetLocation, ObjectQueryParams);
+	GetWorld()->LineTraceSingleByObjectType(OutHitResult, CameraLocation, TargetLocation, ObjectQueryParams, QueryParams);
 
 	if (OutHitResult.bBlockingHit)
 	{
@@ -152,8 +155,7 @@ FTransform ASCharacter::ComputeProjectileLaunchTransform() const
 	FVector ProjectileForward = TargetLocation - RightHandLocation;
 	ProjectileForward.Normalize();
 
-	FRotator ProjectileRotation = FRotationMatrix::MakeFromXZ(ProjectileForward, FVector(0.0f,0.0f,1.0f)).Rotator();
-
+	FRotator ProjectileRotation = FRotationMatrix::MakeFromXZ(ProjectileForward, FVector(0.0f, 0.0f, 1.0f)).Rotator();
 
 
 	//temp hack - debugging
@@ -172,10 +174,18 @@ FTransform ASCharacter::ComputeProjectileLaunchTransform() const
 	return SpawnTM;
 }
 
-void ASCharacter::Tick(float DeltaTime)
+void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ProjectileToSpawn)
 {
-	Super::Tick(DeltaTime);
+	if (!ensure(ProjectileToSpawn)) return;
+	FTransform SpawnTM = ComputeProjectileLaunchTransform();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	GetWorld()->SpawnActor<AActor>(ProjectileToSpawn, SpawnTM, SpawnParams);
+}
 
+void ASCharacter::DebugDrawRotationViz() const
+{
 	// -- Rotation Visualization -- //
 	const float DrawScale = 100.0f;
 	const float Thickness = 5.0f;
@@ -191,6 +201,12 @@ void ASCharacter::Tick(float DeltaTime)
 	FVector ControllerDirection_LineEnd = LineStart + (GetControlRotation().Vector() * 100.0f);
 	// Draw 'Controller' Rotation ('PlayerController' that 'possessed' this character)
 	DrawDebugDirectionalArrow(GetWorld(), LineStart, ControllerDirection_LineEnd, DrawScale, FColor::Green, false, 0.0f, 0, Thickness);
+}
+
+void ASCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	DebugDrawRotationViz();
 }
 
 void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

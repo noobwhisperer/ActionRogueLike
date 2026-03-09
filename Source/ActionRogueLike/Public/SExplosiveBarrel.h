@@ -4,21 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "SBarrel.generated.h"
+#include "SExplosiveBarrel.generated.h"
 
 class UStaticMeshComponent;
 class USRadialForceComponent;
 
 UCLASS()
-class ACTIONROGUELIKE_API ASBarrel : public AActor
+class ACTIONROGUELIKE_API ASExplosiveBarrel : public AActor
 {
 	GENERATED_BODY()
 	
 public:
-	ASBarrel();
+	ASExplosiveBarrel();
 
 protected:
-
 
 	/// <summary>
 	/// Mesh representing the barrel
@@ -26,14 +25,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* BarrelMeshComp;
 
-
 	/// <summary>
 	/// RadialForce triggered by explosion when hit by projectile
 	/// </summary>
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USRadialForceComponent* ExplosionForceComp;
-
-	virtual void BeginPlay() override;
 
     UFUNCTION()
     void OnBarrelHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
@@ -43,7 +39,4 @@ protected:
 public:
 
 	virtual void PostInitializeComponents() override;
-
-
-	virtual void Tick(float DeltaTime) override;
 };

@@ -563,4 +563,73 @@ Lecture 8.6 : Materials for User Interface (UMG)
 	- clever use of gradient to create the health bar!
 	- on a UI widget Image, set the material using Appearance->Brush->Image (NOT INTUITIVE REALLY !!)
 		+ you can set a texture here OR a material ... their UI language is pretty conflating
-		
+
+commit : Lecture 8.6 : Materials for User Interface (UMG)
+
+Lecture 9.1 : Assignment 2 Solution Review
+
+	- He walks through the assignment from a few lectures ago.
+
+	- I will adjust my code to look similar to his result. Changing names of classes can sometimes break things, but I'm using AI helpers ... let's see how they do.
+
+		ASProjectileBaseClass changes:
+			- change class name ASProjectile to ASProjectileBase
+				+ used ReSharper C++
+				+ ReSharper C++ offered to "fix" the assets too using some "Core Redirect" thingy !? ... 
+				+ we'll see ... WOW - IT WORKS! auotmatically re-parented the BlackHoleProjectileBP
+			- mark as UCLASS(ABSTRACT) ... prevents it from showing in some UE dropdowns since you can't instantiate it.
+			- added Explode() method
+				+ UFUNCTION(BlueprintCallable, BlueprintNativeEvent) ... recall this means the impl will be named Explode_Implementation() by UE "macro-header-magic"
+				+ spawns ImpactVfx then Destroys this projectile
+					> Note: track down details for lifecycle of the ImpactVfx ...
+			- note: He uses OnActorHit instead of OnActorOverlap (but I thought he wanted us to use overlap so we could filter and ignore teammates for example?)
+			- note: He uses UParticleSystem* and UParticleSystemComponent* for ImpactVfx and EffectComp, respectively
+				+ Why the difference? might be life cycle related ... maybe won't hit anything
+				+ I currently spawn this in BP. I will remove that and use the base class "Explode_Implementation".
+				+ There are Niagara versions of these so I'll use them instead of the old particle system.
+			- he uses PostInitializeComponents() to ignore the player (instigator) who launches the projectile
+				+ But he also has that line commentted out ??
+				+ umh - just match what he does for now and fix everything later.
+			- made my components protected instead of public
+			- removed Tick(), which wasn't overriding anything
+			- note: he's not applying any damage here in the C++ base class.
+				+ I'll comment out my overlap impl that applies damage in case we need to circle back to it.
+
+		ASTeleportProjectile changes
+			- change class name ASTeleportProjectile to ASDashProjectile
+			- use the base class Niagara VFX for the projectile and the impact
+			- minor adjustments to match Tom's version
+
+		ASBarrel changes
+			- change class name ASBarrel ro ASExplosiveBarrel
+			- minor updates to batch Tom's version
+			- BUT I keep some differences:
+				+ code in OnBarrelHit that makes it only explode if hit by Magic Projectile
+				+ I bind a custom ExplosionForceComp component that allows me to apply damage and affect other actors aside from just the actor who hit the barrel
+
+		ASCharacter changes
+			- added code to ignore the character when determining projectil spawn location/direction
+				+ NOTICE: the line trace here uses both FCollisionObjectQueryParams and FCollisionQueryParams inputs for filtering, and the purpose of these
+					are different! Former is an Object Type Filter , latter is more specific instance filter(s)
+			- refactored the projectile spawning code into a single function
+			- note: I keep the line trace. Tom uses a sphere sweep
+				+ my results are slightly different but I like them. ... seems more accurate than his approach, possibly
+					because he sweeps in the ControlRotation direction versus the Camera forward direction
+			- my projectile "Target Distance" is exposed to BP
+
+
+	Redirector Nightmares!
+		- ok ,  so things seem to be working "ok" after the refactor, but my BPs that are derived from the SProjectileBase have some
+			strange defects ... multiple copies of the EffectComp and MoveComp components. I think this has something to do
+			with renaming things and redirection failing. I used ReSharper C++ to auto-magically handle this for me, but seems there
+			are some side effects. I'm not even use how to clean up this mess, so I think I will jusdt re-create the BP classes in Editor
+
+		- left the broken BPs with redirect weirdness in a separate folder, and just created new clean versions. It would be great to 
+			figure out proper way to clean these up and save them.
+
+	- also updated the projectile cannon to implement our interaction interface and toggle a "Cannon Enabled" flag. (Tired of getting spammed
+		with projectiles while testing other stuff)
+
+commit : 9.1 : Assignment 2 Solution Review - Refactor and Cleanup
+
+

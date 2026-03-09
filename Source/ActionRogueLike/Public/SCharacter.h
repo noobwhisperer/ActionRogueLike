@@ -29,9 +29,18 @@ protected:
 	TSubclassOf<AActor> TeleportProjectialClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
+	float TargetDistance = 3000.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	float AttackAnimDelay = 0.2f;
+
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnimMontage;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
+	FTimerHandle TimerHandle_BlackHoleAttack;
+	FTimerHandle TimerHandle_DashAttack;
 
 public:
 	ASCharacter();
@@ -55,17 +64,20 @@ protected:
 	void MoveRight(float Value);
 
 	void PrimaryAttack();
-	void PrimaryAttack_TimeElapsed();
-
 	void BlackHoleAttack();
-	void BlackHoleAttack_TimeElapsed();
-
 	void TeleportAttack();
+
+	void PrimaryAttack_TimeElapsed();
+	void BlackHoleAttack_TimeElapsed();
 	void TeleportAttack_TimeElapsed();
 
 	void PrimaryInteract();
 
 	FTransform ComputeProjectileLaunchTransform() const;
+
+	void SpawnProjectile(TSubclassOf<AActor> ProjectileToSpawn);
+
+	void DebugDrawRotationViz() const;
 
 public:
 	virtual void Tick(float DeltaTime) override;
