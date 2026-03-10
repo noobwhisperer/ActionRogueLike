@@ -639,3 +639,24 @@ Lecture 9.3 : Animation Blueprints & Player Death
 	- easy - no additional notes
 
 commit : 9.3 : Animation Blueprints & Player Death
+
+Lecture 9.4 Projected "3D" UI (Damage Numbers)
+
+	- created a widget to show a popup for the character's damage ... not sure exactly how we'll use it yet though
+		+ exposed "DamageText" TextBox of the widget so it can be accessed from BPs.
+		+ using "Expose on Spawn" for this widget's BP variable DamageText
+			> this will create a "pin" for the corresponding variable to be set as input for a "Create Yada Yada Widget" spawn node in BP.
+		+ using "Instance Editable" for this widget's BP variable DamageText
+
+		+ inside this widget's BP we can update the text position using info from the attached actor
+			> see details for "Set Render Translation" and "Project World To Screen"
+		+ there's some issues to fuss with related to the viewport scaling size
+		+ we set up the widget to "remove from parent" after timer expires (in widget construct event)
+			> note: verify this will also destroy the widget ?
+		+ we set the widget up to spawn when the actor it's attached to has a health change (via the Attribute Componenet's OnHealthChange event)
+
+
+	- he appears to run out of time, so we stop here. I'll check in and finish up as part of the Assignment 3 probably
+
+commit : 9.4 : Projected "3D" UI (Damage Numbers)
+
