@@ -34,9 +34,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	float AttackAnimDelay = 0.2f;
 
-
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnimMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	FColor DamageColor = FColor::Red;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageSpeed = 1.0f;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 	FTimerHandle TimerHandle_BlackHoleAttack;

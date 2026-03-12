@@ -10,6 +10,8 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UNiagaraComponent;
 class UNiagaraSystem;
+class USoundCue;
+class UAudioComponent;
 
 UCLASS(ABSTRACT)
 class ACTIONROGUELIKE_API ASProjectileBase : public AActor
@@ -31,11 +33,22 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UNiagaraComponent* EffectComp;
 
-	UPROPERTY(EditAnywhere, Category = "SProjectile")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UAudioComponent* AudioComp;
+
+	UPROPERTY(EditAnywhere, Category = "SProjectileBase")
 	UNiagaraSystem* ImpactVfx;
 
-	UPROPERTY(EditAnywhere, Category = "SProjectile")
+	UPROPERTY(EditAnywhere, Category = "SProjectileBase")
+	USoundCue* ProjectileSoundCue;
+
+	UPROPERTY(EditAnywhere, Category = "SProjectileBase")
+	USoundCue* ImpactSoundCue;
+
+	UPROPERTY(EditAnywhere, Category = "SProjectileBase")
 	bool bShowDebugGraphics = false;
+
+	virtual void BeginPlay() override;
 
 	virtual void PostInitializeComponents() override;
 
@@ -45,4 +58,5 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Explode();
 
+	virtual void Destroyed() override;
 };

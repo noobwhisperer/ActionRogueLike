@@ -1,16 +1,14 @@
 // file: SProjectile.cpp
 
-
 #include "SProjectileBase.h"
-
 
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
-
-// not used yet ... but we'll see what Tom does with this in the next video (he currently doesn't deal damage here)
-//#include "SAttributeComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+#include "Components/AudioComponent.h"
 
 ASProjectileBase::ASProjectileBase()
 {
@@ -24,7 +22,11 @@ ASProjectileBase::ASProjectileBase()
 	RootComponent = SphereComp;
 
 	EffectComp = CreateDefaultSubobject<UNiagaraComponent>("EffectComp");
-	EffectComp->SetupAttachment(SphereComp);
+	EffectComp->SetupAttachment(RootComponent);
+
+	AudioComp = CreateDefaultSubobject<UAudioComponent>("AudioComp");
+	AudioComp->SetupAttachment(RootComponent);
+	AudioComp->bAutoActivate = false;
 
 	ProjectileMoveComp = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMoveComp");
 	ProjectileMoveComp->bInitialVelocityInLocalSpace = true;
@@ -48,6 +50,17 @@ void ASProjectileBase::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Oth
 	Explode();
 }
 
+void ASProjectileBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if(ProjectileSoundCue && AudioComp)
+	{
+		AudioComp->SetSound(ProjectileSoundCue);
+		AudioComp->Play();
+	}
+}
+
 
 // _Implementation from it being marked as BlueprintNativeEvent
 void ASProjectileBase::Explode_Implementation()
@@ -64,24 +77,22 @@ void ASProjectileBase::Explode_Implementation()
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactVfx, GetActorLocation(), GetActorRotation());
 		}
 
+		if(ImpactSoundCue)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, ImpactSoundCue, GetActorLocation());
+		}
+
 		Destroy();
 	}
 }
 
+void ASProjectileBase::Destroyed()
+{
+	// Stop the projectile sound if it's still playing
+	if(AudioComp && AudioComp->IsPlaying())
+	{
+		AudioComp->Stop();
+	}
 
-//TSH - synching up to Tom's version ... He uses Hit instead of overlap , and doesn't deal damage here
-//
-// void ASProjectileBase::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-// {
-// 	if (OtherActor)
-// 	{
-// 		USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
-//
-// 		if( AttributeComp)
-// 		{
-// 			AttributeComp->ApplyHealthChange(-20.0f);
-//
-// 			Destroy();	// Hmmm - I'm not sure this is a good idea, but I'll see what he shows us next
-// 		}
-// 	}
-// }
+	Super::Destroyed();
+}

@@ -660,3 +660,26 @@ Lecture 9.4 Projected "3D" UI (Damage Numbers)
 
 commit : 9.4 : Projected "3D" UI (Damage Numbers)
 
+Lecture 9.5 : Assignment 3
+
+	- SMagicProjectile updates
+		+ add 2 sound cues for the projectile in flight and the impact
+			> I will do this in base class since might make sense to use  for other projectiles as well
+			> write code to ignore them if nothing is "wired up" (nullptrs)
+		+ use AudioComponent for sounds that need to travel with an "owner" and need to be turned off
+		+ fine to trigger Sound Cue at location for "fire and forget" sounds
+		+ BP is already clean with only data overrides ... no BP-code.
+	- SPlayerCharacter
+		+ Copied the M_CharacterSimple material to my Materials folder, and named it M_CharacterSimple2
+		+ Created an instance of it : MI_CharacterSimple2
+			> set the global parameters to values similar to the MI_CharacterSimple_Inst (original)
+			> make some of the color slightly different so it's easy to tell we are using the new material
+			> FresnelColor in this material, but doesn't appear to be used ... I'll remove it.
+		+ apply my new material instance to the PlayerCharacter in all the same slots that used to be MI_CharacterSimple_Inst
+		+ add code to SCharacter::OnHealthChanged to set the material parameter for TimeToHit 
+		+ tested ... looks same as before, but slightly different colors
+		+ ok cool, all working and tested. looks good - I choose to adjust the base color and emissive during a "hit taken"
+			so it would be more obvious and for debugging. I also set the hit speed to larger number so the effect stays for longer.
+
+commit : Assignment 3 : SMagicProjectile and SPlayerCharacter
+

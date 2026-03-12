@@ -46,6 +46,19 @@ void ASCharacter::PostInitializeComponents()
 
 void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
+
+	// check for taking damage
+
+	if(Delta < 0.0f)
+	{
+		// need to check nullptr for mesh ??
+
+		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);	// trigger hitflash on material
+	}
+
+
+	// check for DEAD
+
 	if(NewHealth < 0.5f && Delta < 0.5f)
 	{
 		//dead
