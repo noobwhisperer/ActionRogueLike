@@ -683,3 +683,19 @@ Lecture 9.5 : Assignment 3
 
 commit : Assignment 3 : SMagicProjectile and SPlayerCharacter
 
+	- SAttributeComponent (HealthMax Attribute)
+		+ added the MaxHealth and made changes to code to clamp between 0 and MaxHealth
+	- MI_CharacterSimple2
+		+ set initial value of TimeToHit to "-100000" ... just to prevent it from playing the hit flash upon spawning. This is a bit
+			of a hack, but ok for this tutorial
+	- UI for the DamagePopup_Widget
+		+ Added a float variable "DamageAmount" , exposed on spawn
+		+ Added BP code in the Construct Event to convert the DamageAmount to text and place into the DamageText field
+		+ renamed the TextBlock to "DamageTextBlock" to avoid some confusion. TO set the text on a TextBlock, you need to:
+			> check IsVariable in details from widget designer right panel
+			> drag the variable DamageTextBlock onto the BP graph and select Get
+			> now pull a wire off this variable in the BP graph and call SetText function with this TextBlock as the target
+		+ I added a floating text so it drifts up from the actor to a prescribed height over it's duration. This is enough for now.
+
+
+commit : Assignment 3 : SAttributeComponent , MI_CharacterSimple2 , and DamagePopup_Widget
