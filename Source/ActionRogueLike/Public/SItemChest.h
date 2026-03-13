@@ -17,10 +17,13 @@ class ACTIONROGUELIKE_API ASItemChest : public AActor, public ISGameplayInterfac
 
 public:
 
-	UPROPERTY(EditAnywhere)
-	float TargetPitch;
+	ASItemChest();
 
 	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
+
+	// pitch angle for the lid to open to when the chest is interacted with
+	UPROPERTY(EditAnywhere)
+	float TargetPitch;
 
 protected:
 
@@ -30,11 +33,5 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	UStaticMeshComponent* LidMesh;
 
-	virtual void BeginPlay() override;
 
-public:
-
-	ASItemChest();
-
-	virtual void Tick(float DeltaTime) override;
 };

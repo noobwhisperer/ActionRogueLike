@@ -22,7 +22,6 @@ public:
 	ASTargetDummy();
 
 protected:
-	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USAttributeComponent* AttributeComp;

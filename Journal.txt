@@ -699,3 +699,14 @@ commit : Assignment 3 : SMagicProjectile and SPlayerCharacter
 
 
 commit : Assignment 3 : SAttributeComponent , MI_CharacterSimple2 , and DamagePopup_Widget
+
+	- HealthPotion
+		+ create a new AActor in C++ : SHealthPotion
+		+ add code to implement the 
+		+ changed the SAttributeComponent Health and MaxHealth to use int32 types
+		+ added code to allow the HealthPotion to enter/exit available state after use based on a timer.
+			> used a parameter in material to make the bottle look empty , but otherwise rendering the same.
+	- SMagicProjectile
+		+ I'm SKIPPING the Bonus work on this for now... it's easy-peasy, but I want to get through this course faster
+
+commit :  Assignment 3 : Completed - End of Lecture 9

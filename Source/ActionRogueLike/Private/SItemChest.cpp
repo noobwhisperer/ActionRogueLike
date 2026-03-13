@@ -27,15 +27,4 @@ void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 
 }
 
-void ASItemChest::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-void ASItemChest::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
