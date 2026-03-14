@@ -12,11 +12,6 @@ ASTargetDummy::ASTargetDummy()
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASTargetDummy::OnHealthChanged);
 }
 
-void ASTargetDummy::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ASTargetDummy::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
 

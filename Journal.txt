@@ -710,3 +710,59 @@ commit : Assignment 3 : SAttributeComponent , MI_CharacterSimple2 , and DamagePo
 		+ I'm SKIPPING the Bonus work on this for now... it's easy-peasy, but I want to get through this course faster
 
 commit :  Assignment 3 : Completed - End of Lecture 9
+
+Lecture 10 : Basic AI & Behavior Trees
+
+Lecture 10.1 : Overview
+
+	Behavior Trees
+		- Sequence : run all nodes sequentially
+		- Selector : pick one child-node
+		- Task : actions, like attack , move to, etc.
+		- Service: Runs repeatedly for "background tasks"
+		- Decorator : condition checks and flow control
+
+	note: basic just a big FSM with some special names for certain state transitions
+
+Lecture 10.2 : Bot Behaviors & Movement
+
+	- create C++ SAICharacter and SAIController
+	- made minor mods to one of the Paragon AI assets : MinionRanged_AnimBP
+	- created MinionRangedBP ... using our SAICharacter
+	- need to add Nav Mesh Bounds Volume to our level for AI Navigation to work properly
+	- create AI BlackBoard (BB) and BehaviorTree (BT) assets.
+		+ MinionRangedBB
+		+ MinionRangedBT
+		+ connect them within the BT Details panel
+	- cobble together a BT that will move toward the "MoveToLocation"
+		+ note: hate the name "MoveToLocation" for the vector that is the target location ... it should not be named using a verb!
+	- to "wire up" this BT to our new minion :
+		+ open ASAIController (C++)
+			> add a property for the BehaviorTree ...(I called my variable FirstBT)
+			> override BeginPlay .. call RunBehaviorTree on our connected BT in BeginPlay().
+			> notice - we do not instantiate FirstBT in our ctor. I'm not sure why we do this sometimes for "subobjects" and
+				sometimes we don't. Seems we'll be "sharing" a common copy since we don't instantiate our own ??
+		+ open Editor, create a BP class derived from the ASAIController called MinionControllerBP
+			> wire up MinionControllerBP's FirstBP to point to MinionRangedBT
+				: note - points to the asset directly, not creating a subobject instance
+		+ now we need to wire up our AI character to use this new controller
+			> open MinionRangedBP (the Character BP for our AI)
+			> set Pawn->AIControllerClass to MinionRangedBP in the Details dropdown
+		+ ok, the MinionRangedBB variable has not yet been set to point to the player's character
+			> open ASAIController.cpp and add code to the BeginPLay() to set this... not ideal place, but WIP for now
+		+ try to run it !
+			> ERROR SPAM : and the AI enemy in the scene just collapses as dead
+			> see the comments on Looman. Looks like there's some temporal coupling issue with mods / live coding / ?? when changing the
+				anim BP and code after an instance of the AI character was already added to the scene (could be UE bug as well).
+			> removed the character from the scene , added a new one, and it is working now.
+			> ... well, the animated skeletal mesh needs to be moved down in the character BP about -90 units though...
+			> ok, all fixed now.
+	- now make some last minute changes to MinionRangedBB (AI data)
+		+ create TargetActor .. an Actor typed variable
+		+ mod BT to point to the TargetActor in the MoveTo
+		+ modify ASAIController.cpp code to bind TargetActor
+	- test , ok, got it all working now
+
+
+
+commit Lecture 10.2 : Bot Behaviors & Movement
