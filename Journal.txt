@@ -766,3 +766,33 @@ Lecture 10.2 : Bot Behaviors & Movement
 
 
 commit Lecture 10.2 : Bot Behaviors & Movement
+
+Lecture 10.3 : Custom "Check Attack Range" Service for BT
+
+	- a service can be created that will run and continually check "something", like distance to the
+		target, etc.
+	- create a new C++ class derived from BTService : SBTService_CheckAttackRange
+		> note - there is a separate base class for creating a Blueprint BT Service
+			: this is condfusing... not sure exactly what this actually means
+	- Services have an interval value that allows them to only tick every so often
+		note: this could help performance, but scheduling this intermittent work for the CPU this way with
+		floating point timers for the interval can have some problems (e.g. a bunch of tasks might get triggered
+		all at once and blow the frame, also frame times become inconsistent)
+
+	4:30 : the compiler error he sees here seems to have been fixed by UE ?
+		- he adds a module to the ActionRogueLike.Build.cs that was missing : "GameplayTasks" and "AIModule"
+		- not sure why I don't need it ... maybe stuff has moved around in UE 5.6
+
+	10:00 : note ... the copilot did a good job of auto-completing this code snip
+
+		- He demonstrates how to use the FBlackboardKeySelector type to "lookup" values from the BB
+
+	22:30 : setting up an AI line trace in C++ code
+
+	25:00 : Huhh !? WTF are you saying here !!! Very unclear description of the Observer aborts "Lower Priority" selection (instead of Self)
+		- Dig into this later to try to understand it.
+
+
+
+commit Lecture 10.3 : Custom "Check Attack Range" Service for BT
+
