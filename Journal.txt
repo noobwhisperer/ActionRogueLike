@@ -796,3 +796,65 @@ Lecture 10.3 : Custom "Check Attack Range" Service for BT
 
 commit Lecture 10.3 : Custom "Check Attack Range" Service for BT
 
+
+NOTE: This completes the course up to Lecture 11. I will now try to skip Lectures 11-13 in the interest of time. We are not
+using the built-in UE AI stuff, so it's not that useful at the moment. I may come back to this if time permits OR if the later
+lectures depend on some of these AI lectures being completed.
+
+
+Lecture 14 : UMG with C++ & more Framework Extensions [ Started This - But will pause on it until Lectures 11-13 are completed]
+
+	4:00 notice that marking a property with UPROPERTY()  exposes your variable (as a pointer) , but DOES NOT register
+		to "keep it alive" (e.g. doesn't auto-hook you up with ref counting of that object)
+
+	7:25 Hmmm .. sounds like a "tricky" pointer swap thingy he's going to show us ... feels a bit hacky, but lets see what it is.
+
+	- meta BindWidget ... he must have introduced this in a lecture I skipped. look into it later for details.
+
+		UPROPERTY(meta = (BindWidget))
+		USizeBox* ParentSizeBox;
+
+	10:10 : note, he mentions we need to add UMG to the Build.cs file, but this seems to compile without me doing that... not sure why
+		? Stuff moved around from UE 5.6 ?
+
+	- create a BP from this new C++ widget class
+		+ immediately get compiler error:
+
+			LogBlueprint: Error: [AssetLog] /Game/ActionRogueLike/UI/MinionHealth_Widget.MinionHealth_Widget: [Compiler] 
+			A required widget binding "ParentSizeBox" of type  Size Box  was not found.
+
+		+ this is expected
+		+ so we add a SizeBox in the Designer
+			- name it ParentSizeBox (match the name of our C++ variable)
+		+ ok - now it compiles. (This feels a bit hacky to me though)
+
+		+ OK, now I see ... Here's the poop (from Claude):
+
+			meta = (BindWidget) is a UMG (Unreal Motion Graphics) specifier that creates a binding between
+			a C++ UPROPERTY and a widget that exists in a Blueprint-created UUserWidget.
+			Concretely, it means:
+
+			You declare the widget variable in C++ with BindWidget
+			You create a widget of the same name and same type in the UMG designer (the Blueprint visual editor)
+			Unreal automatically connects the two — your C++ variable becomes a valid pointer to that designer-created widget at runtime
+
+			So if you have USizeBox* ParentSizeBox in C++, you must have a SizeBox widget named exactly ParentSizeBox in your UMG
+			Blueprint layout. If the names don't match, you'll get a compile/load error (or warning, depending on configuration).
+			The practical benefit is that you can then manipulate that designer-placed widget from C++ code — changing its properties,
+			binding events to it, etc. — while still being able to visually lay it out in the UMG designer.
+			It's essentially the UMG equivalent of how VisibleAnywhere exposes components to the Blueprint editor, except BindWidget goes
+			the other direction: the widget lives in the Blueprint designer, and C++ gets a pointer to it.
+
+		+ TRICKY !
+			So, you can declare a pointer variable in your C++ without address how the object gets instantiated, then add an object
+			to your widget of exact same TYPE and with exact same VARIABLE NAME, and it will magically bind to the one you've added.
+
+		+ add an image
+			> set the material to M_HealthBar material (CONFUSING - This is done in details panel Apprearance->Brush->Image !!)
+
+Hmmm - ok, the AI Character has changed a bit during the Lectures I skipped.... I'm gonna just go back and do them, but try my best to plow through them.
+
+
+
+
+
