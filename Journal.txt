@@ -801,8 +801,9 @@ NOTE: This completes the course up to Lecture 11. I will now try to skip Lecture
 using the built-in UE AI stuff, so it's not that useful at the moment. I may come back to this if time permits OR if the later
 lectures depend on some of these AI lectures being completed.
 
-
 Lecture 14 : UMG with C++ & more Framework Extensions [ Started This - But will pause on it until Lectures 11-13 are completed]
+
+Lecture 14.1 : Health Bar with C++
 
 	4:00 notice that marking a property with UPROPERTY()  exposes your variable (as a pointer) , but DOES NOT register
 		to "keep it alive" (e.g. doesn't auto-hook you up with ref counting of that object)
@@ -855,6 +856,16 @@ Lecture 14 : UMG with C++ & more Framework Extensions [ Started This - But will 
 Hmmm - ok, the AI Character has changed a bit during the Lectures I skipped.... I'm gonna just go back and do them, but try my best to plow through them.
 
 
+commit : Lecture 14 : UMG with C++ & more Framework Extensions [ Started This - But will pause on it until Lectures 11-13 are completed]
 
+Lecture 11 : Intermediate AI with Custom Tasks & EQS
 
+Lecture 11.1 : Custom C++ BT Task for Ranged Attacks
 
+	+ follow steps to create the C++ class USBTTask_RangedAttack
+	+ compile, open editor
+	+ open MinionRangedBT
+		> add RangedAttack child node to the "CheckAttackRange" Selector
+		> NOTICE : The name RangedAttack appears in the GUI drop down now and refers specifically to USBTTask_RangedAttack !
+			: some auto-naming magic going on here to be aware of
+			
