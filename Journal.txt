@@ -1047,3 +1047,21 @@ Lecture 14.2 : Updating HUD Widgets
 
 
 commit : Lecture 14.2 : Updating HUD Widgets
+
+Lecture 14.3 : Setup Proper Player Spawn
+
+	- currently we use "auto possess" and player 0 , and place an instance of the Player Character into the level
+		+ this is problematic for multiplayer games
+
+	- remove the instance from the scene
+	- add a PlayerStart to the scene
+
+	- create a new BP derived from GameModeBase (they must have done this in a skipped lecture) ... name it GameModeBP
+		+ set the Default Pawn Class to our Player Character
+		+ peek at all the override functions... many available
+
+	- in World Settings, assign the GameMode Override to use our GameModeBP
+
+	- ok , now reverse that ... remove the override in World Settings
+	- set the gamemode in Project Settings ... this will apply "project-wide" ... not just for a specific map
+
