@@ -1091,9 +1091,48 @@ Lecture 14.4 : Adding Debug Commands
 		+ note: I think there's some holes here though... God mode as implemented here will also prevent healing
 
 
-	- NOTE: STILL SOME THINGS I NEED TO CLEAN UP FROM SKIPPING LECTURES .... VISIT LECTURE 12 ... SET UP THE GAME MODE PIECES
-		THAT I AM MISSING, AND ALSO THE AUTO MATIC AI SPAWNING STUFF
+	- NOTE: STILL SOME THINGS I NEED TO CLEAN UP FROM SKIPPING LECTURES
+		+ VISIT LECTURE 12 AT SOME POINT
+		+ SET UP THE GAME MODE PIECES THAT I AM MISSING
+		+ ALSO THE AUTOMATIC AI SPAWNING STUFF
 
 commit : Lecture 14.4 : Adding Debug Commands
 
 
+
+
+
+
+Lecture 15 : Console Variables, GameMode Rules
+
+Lecture 15.1 : Assignment review
+	+ SKIP ... I pretty much skipped this assignment and just cobble together the smallest results needed into the code/BP
+		to allow me to move forward without "smart" AI. I can go back and make it smarted later if it makes sense, but this
+		is old AI system and some pieces are deprecated. Also we don't use it IRL.
+
+
+BEGIN TSH-ASIDE FIX BOT SPAWNING - It's broken only because we skipped a bunch of AI stuff
+
+	The current bot spawning is not working, probably because we skipped some lectures. I just want to take a few minutes to
+	fix it such that we get some bots spawning and respawning, so the remaining lectures are "testable".
+
+	+ Examine the current code and test in debugger
+		- ASGameModeBase::StartPlay starts a timer with callback to ASGameModeBase::SpawnBotTimerElapsed
+		- ASGameModeBase::SpawnBotTimerElapsed : goal looks like it will just spawn a new based on a query if the numbots < maxbots
+			> I see a couple things "broken" here:
+				: SpanBotQuery is nullptr (and we don't have a nullptr check)
+				: TimerHandle_SpawnBots does not get reset anywhere, BUT IT IS SET UP TO LOOP
+		- Peek at video Lecture 12.3
+			> create a new BP derived from EnvQueryContextBlueprintBase ... called QueryContext_AllPlayers
+				: override function Provide Actors Set
+					He uses a super expense hack to get the list of Player Actors ... but good enough for now
+			> create a new EQ called FindBotSpawn
+				: Donut -> Center -> use the new
+
+		- Ok , I have something "good enough" ... didn't add too many fancy items for the spawn location, just need
+			testability in later lectures.
+END TSH-ASIDE FIX BOT SPAWNING - It's broken only because we skipped a bunch of AI stuff
+
+commit : TSH-ASIDE FIX BOT SPAWNING
+
+Lecture 15.2 :

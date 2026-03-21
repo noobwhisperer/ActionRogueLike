@@ -12,7 +12,7 @@
 
 
 
-
+#pragma optimize("",off)
 
 ASGameModeBase::ASGameModeBase()
 {
@@ -61,11 +61,11 @@ void ASGameModeBase::SpawnBotTimerElapsed()
 
 	UE_LOG(LogTemp, Log, TEXT("Found %i alive bots."), NrOfAliveBots);
 
-	float MaxBotCount = 10.0f;
-	if (DifficultyCurve)
-	{
-		MaxBotCount = DifficultyCurve->GetFloatValue(GetWorld()->TimeSeconds);
-	}
+	// float MaxBotCount = 10.0f;
+	// if (DifficultyCurve)
+	// {
+	// 	MaxBotCount = DifficultyCurve->GetFloatValue(GetWorld()->TimeSeconds);
+	// }
 
 	if (NrOfAliveBots >= MaxBotCount)
 	{
@@ -98,3 +98,5 @@ void ASGameModeBase::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryIn
 		DrawDebugSphere(GetWorld(), Locations[0], 50.0f, 20, FColor::Blue, false, 60.0f);
 	}
 }
+
+#pragma optimize("",on)
