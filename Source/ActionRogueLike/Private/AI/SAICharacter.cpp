@@ -4,25 +4,96 @@
 #include "AI/SAICharacter.h"
 
 
-// Sets default values
+#include "AIController.h"
+#include "BrainComponent.h"
+#include "SAttributeComponent.h"
+#include "SWorldUserWidget.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
+
+//note: UPawnSensingComponent is deprecated - we should be using the AI Perception system instead
+//#include "Perception/PawnSensingComponent.h"
+
+
 ASAICharacter::ASAICharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	//note: UPawnSensingComponent is deprecated - we should be using the AI Perception system instead
 
+	//	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
+
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
+
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	TimeToHitParamName = "TimeToHit";
 }
 
-// Called when the game starts or when spawned
-void ASAICharacter::BeginPlay()
+
+void ASAICharacter::PostInitializeComponents()
 {
-	Super::BeginPlay();
-	
+	Super::PostInitializeComponents();
+
+	//PawnSensingComp->OnSeePawn.AddDynamic(this, &ASAICharacter::OnPawnSeen);
+
+
+	AttributeComp->OnHealthChanged.AddDynamic(this, &ASAICharacter::OnHealthChanged);
 }
 
-// Called every frame
-void ASAICharacter::Tick(float DeltaTime)
+
+void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
-	Super::Tick(DeltaTime);
+	if (Delta < 0.0f)
+	{
+		if (InstigatorActor != this)
+		{
+			SetTargetActor(InstigatorActor);
+		}
 
+		if (ActiveHealthBar == nullptr)
+		{
+			ActiveHealthBar = CreateWidget<USWorldUserWidget>(GetWorld(), HealthBarWidgetClass);
+			if (ActiveHealthBar)
+			{
+				ActiveHealthBar->AttachedActor = this;
+				ActiveHealthBar->AddToViewport();
+			}
+		}
+
+		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
+
+		if (NewHealth <= 0.0f)
+		{
+			// stop BT
+			AAIController* AIC = Cast<AAIController>(GetController());
+			if (AIC)
+			{
+				AIC->GetBrainComponent()->StopLogic("Killed");
+			}
+
+			// ragdoll
+			GetMesh()->SetAllBodiesSimulatePhysics(true);
+			GetMesh()->SetCollisionProfileName("Ragdoll");
+
+			// set lifespan
+			SetLifeSpan(10.0f);
+		}
+	}
 }
 
+
+void ASAICharacter::SetTargetActor(AActor* NewTarget)
+{
+	AAIController* AIC = Cast<AAIController>(GetController());
+	if (AIC)
+	{
+		AIC->GetBlackboardComponent()->SetValueAsObject("TargetActor", NewTarget);
+	}
+}
+
+
+void ASAICharacter::OnPawnSeen(APawn* Pawn)
+{
+	SetTargetActor(Pawn);
+
+	DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 0.5f, true);
+}

@@ -8,6 +8,16 @@ USAttributeComponent::USAttributeComponent()
 	Health = MaxHealth;
 }
 
+USAttributeComponent* USAttributeComponent::GetAttributes(AActor* FromActor)
+{
+	if (FromActor)
+	{
+		return Cast<USAttributeComponent>(FromActor->GetComponentByClass(USAttributeComponent::StaticClass()));
+	}
+
+	return nullptr;
+}
+
 bool USAttributeComponent::IsAlive() const
 {
 	return Health > 0.0f;

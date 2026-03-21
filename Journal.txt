@@ -868,4 +868,162 @@ Lecture 11.1 : Custom C++ BT Task for Ranged Attacks
 		> add RangedAttack child node to the "CheckAttackRange" Selector
 		> NOTICE : The name RangedAttack appears in the GUI drop down now and refers specifically to USBTTask_RangedAttack !
 			: some auto-naming magic going on here to be aware of
-			
+
+commit Lecture 11.1 : Custom C++ BT Task for Ranged Attacks
+
+
+Lecture 11.2 : Environment Queries for smarter movement
+
+	- double check that EQS is enabled in the Editor project settings (was experimental...now ??)
+		> UE 5.6 ... different
+
+	- Okay, UE 5.6 is very different system for environmental queries.
+
+
+Hmmmm - maybe I need to consider pivot? The ROI on Looman course is fading with the extra friction required to update things to UE 5.6
+
+	Here's a couple old Udemy courses I purchased a while ago:
+
+	1. Pro Unreal Engine Game Coding : https://www.udemy.com/course/pro-unreal-engine-game-coding/
+		- appears to be initially in UE 4.25 ... so quite dated.
+		- last updated 12/2025 ... not sure how UE5 friendly this is.
+		- rating 4.5/5.0 stars (775 ratings)
+		- 27.5 hours of video (on-demand)
+
+	2. Unreal Engine 5 C++ Multiplayer Shooter : https://www.udemy.com/course/unreal-engine-5-cpp-multiplayer-shooter/
+		- appears to be initially in UE 4.26-ish ?? UE 5.0.0 shows as "early access" in his engine list in video
+		- last updated ??
+		- rating 4.7/5.0 stars (3862 ratings)
+		- 65 hours of video (on-demand)
+		- content is well polished
+		- repo appears to be updated to UE 5.0 : https://github.com/DruidMech/MultiplayerCourseBlasterGame
+
+	3. Unreal Engine 5 C++ Game Development (Fully Updated in 5.6) : https://www.udemy.com/course/unrealcourse/
+		- appears to be updated for UE 5.6 ! now sure how completely (some questions are 9+ years old, so def UEU 4.X originally)
+		- last updated 2/2026
+		- rating 4.7/5.0 stars (74401 ratings)
+		- 26.5 hours of video (on-demand)
+		- NO NETWORKING
+
+These are also a little dated, although they claim to be updated for 5.6 .
+
+I'm going to try skipping ahead AGAIN. I will download Tom's code from his repo and try to cobble together enough of what I need to continue by skipping all the rest of the AI sections.
+
+Let's try Tom's UE 5.5 branch !
+	- switch to that branch on github.
+	- copy to a working folder: E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-UE5.5-Branch-Latest
+	- run powershell command to gen project: E:\UE5\GenerateProjectFiles.bat "E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-UE5.5-Branch-Latest\ActionRoguelike.uproject" -Game
+
+			PS C:\Users\tim> E:\UE5\GenerateProjectFiles.bat "E:\Unreal5Projects\TomLoomanResources\TomsRepo-ActionRogueLike\ActionRoguelike-UE5.5-Branch-Latest\ActionRoguelike.uproject" -Game
+			Setting up Unreal Engine project files...
+			Using bundled DotNet SDK version: 8.0.300 win-x64
+			Log file: E:\UE5\Engine\Programs\UnrealBuildTool\Log_GPF.txt
+
+			Some Platforms were skipped due to invalid SDK setup: Mac, IOS, Android, Linux, LinuxArm64, TVOS.
+			See the log file for detailed information
+
+
+			Generating VisualStudio project files:
+			Discovering modules, targets and source code for project...
+			Adding projects for all targets...
+			Adding projects for all targets took 1.16s
+			Adding projects for all game projects took 0.00s
+			Adding projects for all modules took 0.28s
+			Compiling Rules Assemblies 100%
+			Creating Build Targets
+			Project 'ActionRoguelikeEditor' depends on plugin 'StructUtils' which was deprecated in 5.5 and will soon be removed. Please update your dependencies.
+			Creating Build Targets 100%
+			Creating Build Targets took 1.42s
+			Binding IntelliSense data... 100%
+			Binding IntelliSense data took 2.58s
+			Writing project files...
+			Available arm64 toolchains (1):
+			 * C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207
+			    (Family=14.44.35207, FamilyRank=1, Version=14.44.35223, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=arm64)
+			Visual Studio 2022 compiler version 14.44.35223 is not a preferred version. Please use the latest preferred version 14.38.33130
+			Writing project files... 100%
+			Writing project files took 1.64s
+
+			Generating QueryTargets data for editor...
+			Compiling Rules Assemblies 100%
+			Writing Query Target Info 100%
+			Generating QueryTargets data for editor took 0.15s
+
+			Result: Succeeded
+			Total execution time: 8.49 seconds
+			PS C:\Users\tim>
+
+	- notice: one warning
+
+	- open VS solution ... build project
+		+ compiler errors and warnings
+			> there's a lot of missing include files and forward references .... maybe his compiles thanks to "Unity builds"
+			> added missing includes and fixed one apparent compilation bug
+
+				RogueCurveAnimSubsystem.h :
+					void Tick(float DeltaTime)
+					{
+						Time += (DeltaTime*PlayRate);
+
+						//TSH fixing compilation errors - straight up bug here ??
+						// Clamp
+						//FMath::Min(Time, 1.0f);
+
+						Time = FMath::Min(Time, 1.0f);
+						//TSH fixing compilation errors - straight up bug here ??
+
+						float CurrentValue = FMath::InterpEaseInOut(0.0f, 1.0f, Time, EasingExp);
+
+						Callback(CurrentValue);
+					}
+
+			> successfully launched... but one BP has compiler error in construction script.
+
+				BP_ApplyEffectZone:
+					- tried to fix this, but you get into a "death loop" when you mod this construction script
+					then try to recompile the BP
+
+				I was able to "break out" of the death loop by modifying the BP constructor script, then saving it (Do not recompile it),
+				then re-open the editor and it seems to have recompiled it.
+
+				... might be a "live coding" SNAFU . No time to investigate further... I'm just leaving that BP a little broken in that it
+				does not run the BP code to set some text upon construction.
+
+		+ Ok, this is working in UE 5.6, compiling, running the game ... but it's the "final" version from Looman...
+
+	- browsing the UE5.5 branch... there's a commit near Lecture 14, lets grab that one and use it
+		+ perform same steps with this commit checked out ... it will be closer to my code for cherry-picking to skip past AI lectures
+
+Lecture 14.1 : Health Bar with C++ : Continuing with some "hacks" to bypass all AI sections
+
+	- continuing where we left off with Lecture 14.1
+
+	9:45 : He adds the UMG module to the PublicDependencyModuleNames list in ActionRogueLike.Build.cs ... not clear why we have to add it
+		here. It looks like UE auto-magically (?) added it to our uproject, but he doesn't explain what's going on here.
+
+	- launch Editor from VS
+	- we have the MinionHealth_Widget from before
+
+	13:40 : getting ready to spawn the healthbar widget only once the AI character takes damage
+
+	- add code to ASAICharacter::OnHealthChanged to spawn the health bar if it doesn't already exist
+	- add BP to the Widget Event Construct to
+
+	- NOTE: Defining static functions in ActorComponents will make them callable within any other BPs (apparently) with the right UFUNCTION "mark up"
+
+	- in the MinionHealth_Widget BP , bind the "OnHealthChanged"
+		> bind event to "OnHealthChanged" ... creates the node and target is the USAttributeComponent
+		> pull wire off the "Event" pin and add a new custom event ... name it OnHealthChanged_Event (His flow in BP was a bit different)
+			USAttributeComponent header snip :
+				UPROPERTY(BlueprintAssignable)
+				FOnHealthChanged OnHealthChanged;
+		> This is essentially the same a "AddDynamic" in C++ ... we're just binding a delegate callback from BP to the C++ delegate we already have
+			and call in the ApplyHealthChange
+
+	20:24 : he kind of glosses over it, but I think using GetWorld() in our CreateWidget as the owner means that the World instance "owns" this widget
+		in terms of ref counting to "keep it alive" etc. etc. But I'm not 100% sure.
+		It's interesting that we could use an APlayerController, but NOT an AAIController !!
+
+		> ok - all set up now ... be sure to set the MinionRangedBP's AttributeComp -> (Health/ MaxHealth) , or "nothing will happen" !
+
+commit: heckpoint the code .... this is working and seems to match Tom's version at 14.1: 20:58

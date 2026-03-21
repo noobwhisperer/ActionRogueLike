@@ -15,15 +15,16 @@ void USWorldUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTim
 	FVector2D ScreenPosition;
 
 	bool bProjected = UGameplayStatics::ProjectWorldToScreen(GetOwningPlayer(), AttachedActor->GetActorLocation(), ScreenPosition);
-	if(bProjected)
+	if (bProjected)
 	{
 		float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
 		ScreenPosition = ScreenPosition / Scale;
 
-		if(ParentSizeBox)
+		if (ParentSizeBox)
 		{
 			ParentSizeBox->SetRenderTranslation(ScreenPosition);
 		}
 	}
-
 }
+
+

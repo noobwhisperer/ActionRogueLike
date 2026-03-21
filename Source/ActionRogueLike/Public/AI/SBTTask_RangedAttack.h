@@ -23,4 +23,6 @@ protected:
 	TSubclassOf<AActor> ProjectileClass;
 
 
+//	void OnHealthAttributeChanged(float NewValue, const FAttributeModification& AttributeModification);
+
 };

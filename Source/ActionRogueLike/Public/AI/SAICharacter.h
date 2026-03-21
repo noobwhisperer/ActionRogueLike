@@ -6,6 +6,12 @@
 #include "GameFramework/Character.h"
 #include "SAICharacter.generated.h"
 
+
+class UPawnSensingComponent;
+class USAttributeComponent;
+class UUserWidget;
+class USWorldUserWidget;
+
 UCLASS()
 class ACTIONROGUELIKE_API ASAICharacter : public ACharacter
 {
@@ -16,11 +22,31 @@ public:
 	ASAICharacter();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	
+	USWorldUserWidget* ActiveHealthBar;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> HealthBarWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	FName TimeToHitParamName;
+
+	void SetTargetActor(AActor* NewTarget);
+
+	virtual void PostInitializeComponents() override;
+
+	UFUNCTION()
+	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
+
+	//note: UPawnSensingComponent is deprecated - we should be using the AI Perception system instead
+
+	// UPROPERTY(VisibleAnywhere, Category = "Components")
+	// UPawnSensingComponent* PawnSensingComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USAttributeComponent* AttributeComp;
+
+	UFUNCTION()
+	void OnPawnSeen(APawn* Pawn);
+
 };
