@@ -1026,4 +1026,15 @@ Lecture 14.1 : Health Bar with C++ : Continuing with some "hacks" to bypass all 
 
 		> ok - all set up now ... be sure to set the MinionRangedBP's AttributeComp -> (Health/ MaxHealth) , or "nothing will happen" !
 
-commit: heckpoint the code .... this is working and seems to match Tom's version at 14.1: 20:58
+commit: checkpoint the code .... this is working and seems to match Tom's version at 14.1: 20:58
+
+	- continuing the lecture
+	- note: I'm not a fan of how the lifecycle's are managed in this example (e.g. RemoveFromParent() inside NativeTick of USWorldUserWidget)
+		> feels very sloppy
+
+	27:18 : Calling your OnHealthChanged event just to initialize the widget graphics is hacky as hell IMO .... BOO!
+
+	- completed up to 14.1 ... AI is a little "broken" because I skipped sections.
+
+
+commit : Lecture 14.1 completed
