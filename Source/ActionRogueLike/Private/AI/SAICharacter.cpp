@@ -40,9 +40,9 @@ void ASAICharacter::PostInitializeComponents()
 }
 
 
-void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
+void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, int32 NewHealth, int32 Delta)
 {
-	if (Delta < 0.0f)
+	if (Delta < 0)
 	{
 		if (InstigatorActor != this)
 		{
@@ -61,7 +61,7 @@ void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponen
 
 		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
 
-		if (NewHealth <= 0.0f)
+		if (NewHealth <= 0)
 		{
 			// stop BT
 			AAIController* AIC = Cast<AAIController>(GetController());

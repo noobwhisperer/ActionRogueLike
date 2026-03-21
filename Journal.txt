@@ -1065,3 +1065,35 @@ Lecture 14.3 : Setup Proper Player Spawn
 	- ok , now reverse that ... remove the override in World Settings
 	- set the gamemode in Project Settings ... this will apply "project-wide" ... not just for a specific map
 
+	- bottom line, you can override everything as needed ... usual UE stuff
+
+commit : Lecture 14.3 : Setup Proper Player Spawn
+
+
+Lecture 14.4 : Adding Debug Commands
+
+	- add function HealSelf to SCharacter
+
+	- use "UFUNCTION(Exec)" mark up ... this is allowed in only selected classes Character, GameMode, Controller, CheatManager
+
+	- added some stuff that was missing because I skipped ahead and other minor cleanup
+		+ took a few minutes to clean up all the Health/Damage stuff to use int32 instead of floats
+		+ added code to pass the instigator when damnage is applied
+
+	- test out the HealSelf function ... should be available in the console when playing
+		+ works
+
+	- Add another Exec function .... to the Game Mode this time
+		+ KillAll()
+		+ note: I also had to add the missing SGameModeBase.[h,cpp] ... must have come from a skipped lecture
+
+	- Implement "God Mode" ... 
+		+ note: I think there's some holes here though... God mode as implemented here will also prevent healing
+
+
+	- NOTE: STILL SOME THINGS I NEED TO CLEAN UP FROM SKIPPING LECTURES .... VISIT LECTURE 12 ... SET UP THE GAME MODE PIECES
+		THAT I AM MISSING, AND ALSO THE AUTO MATIC AI SPAWNING STUFF
+
+commit : Lecture 14.4 : Adding Debug Commands
+
+

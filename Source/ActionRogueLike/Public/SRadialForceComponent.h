@@ -20,7 +20,7 @@ public:
 	/// Amount of damage to apply to any affected SAttributeComponents
 	/// </summary>
 	UPROPERTY(EditAnywhere)
-	float RadialForceDamage = 20.0f;
+	int32 RadialForceDamage = 20;
 
 	/// <summary>
 	/// Override the FireImpulse method to do our own version which applies damage to

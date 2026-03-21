@@ -26,7 +26,7 @@ void ASHealthPotion::Interact_Implementation(APawn* InstigatorPawn)
 
 	USAttributeComponent* AttComp = InstigatorPawn->GetComponentByClass<USAttributeComponent>();
 
-	if (AttComp && AttComp->ApplyHealthChange(HealingAmount))
+	if (AttComp && AttComp->ApplyHealthChange(this, HealingAmount))
 	{
 		// Healing was successful, start recharge timer
 

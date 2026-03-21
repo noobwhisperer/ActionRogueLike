@@ -18,36 +18,31 @@ USAttributeComponent* USAttributeComponent::GetAttributes(AActor* FromActor)
 	return nullptr;
 }
 
+bool USAttributeComponent::Kill(AActor* InstigatorActor)
+{
+	return ApplyHealthChange(InstigatorActor, -GetHealth());
+}
+
 bool USAttributeComponent::IsAlive() const
 {
 	return Health > 0.0f;
 }
 
-bool USAttributeComponent::ApplyHealthChange(int32 Delta)
+bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, int32 Delta)
 {
-	if(Health <= 0) return false;
 
-	if (Delta > 0)
+	if (!GetOwner()->CanBeDamaged())
 	{
-		// healing
-		if (Health == MaxHealth)
-		{
-			return false;
-		}
-	}
-	else if (Delta < 0)
-	{
-		// damage
-	}
-	else
-	{
-		// nothing
 		return false;
 	}
 
-	Health += Delta;
-	Health = FMath::Clamp(Health, 0, MaxHealth);
-	OnHealthChanged.Broadcast(nullptr, this, Health, Delta);
+	int32 OldHealth = Health;
 
-	return true;
+	Health = FMath::Clamp(Health + Delta, 0, MaxHealth);
+
+	int32 ActualDelta = Health - OldHealth;
+	OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
+
+	return ActualDelta != 0;
+
 }

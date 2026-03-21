@@ -44,22 +44,21 @@ void ASCharacter::PostInitializeComponents()
 	AttributeComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
 }
 
-void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
+void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, int32 NewHealth, int32 Delta)
 {
-
 	// check for taking damage
 
-	if(Delta < 0.0f)
+	if (Delta < 0)
 	{
 		// need to check nullptr for mesh ??
 
-		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);	// trigger hitflash on material
+		GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds); // trigger hitflash on material
 	}
 
 
 	// check for DEAD
 
-	if(NewHealth < 0.5f && Delta < 0.5f)
+	if (NewHealth <= 0 && Delta < 0)
 	{
 		//dead
 
@@ -70,7 +69,6 @@ void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent*
 		DisableInput(PC);
 	}
 }
-
 
 
 void ASCharacter::BeginPlay()
@@ -245,4 +243,12 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+}
+
+void ASCharacter::HealSelf(int32 Amount /* = 100 */)
+{
+	if (AttributeComp)
+	{
+		AttributeComp->ApplyHealthChange(this, Amount);
+	}
 }

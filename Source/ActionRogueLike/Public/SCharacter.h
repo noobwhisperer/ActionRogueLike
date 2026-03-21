@@ -18,7 +18,6 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> ProjectileClass;
 
@@ -47,10 +46,6 @@ protected:
 	FTimerHandle TimerHandle_BlackHoleAttack;
 	FTimerHandle TimerHandle_DashAttack;
 
-public:
-	ASCharacter();
-
-protected:
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
@@ -63,13 +58,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USAttributeComponent* AttributeComp;
 
-		
+
 	virtual void PostInitializeComponents() override;
 
 
 	UFUNCTION()
-	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
-
+	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, int32 NewHealth, int32 Delta);
 
 
 	virtual void BeginPlay() override;
@@ -93,7 +87,17 @@ protected:
 
 	void DebugDrawRotationViz() const;
 
+
 public:
+
+
+	ASCharacter();
+
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(Exec)
+	void HealSelf(int32 Amount = 100);
+
+
 };

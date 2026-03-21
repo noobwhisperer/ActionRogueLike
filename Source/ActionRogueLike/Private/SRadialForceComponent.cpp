@@ -58,7 +58,7 @@ void USRadialForceComponent::FireImpulse()
 
 	for (USAttributeComponent* AttributeComp : AffectedAttributeComponents)
 	{
-		AttributeComp->ApplyHealthChange(-RadialForceDamage);
+		AttributeComp->ApplyHealthChange(GetOwner(), -RadialForceDamage);
 	}
 
 	for (UPrimitiveComponent* PrimitiveComponent : AffectedComponents)
