@@ -1038,3 +1038,12 @@ commit: checkpoint the code .... this is working and seems to match Tom's versio
 
 
 commit : Lecture 14.1 completed
+
+
+Lecture 14.2 : Updating HUD Widgets
+
+	- add some more widgets and place them into a "HUD"
+	- GameModeInfo widget uses "GetGameState" within a function that is bound to the game time text
+
+
+commit : Lecture 14.2 : Updating HUD Widgets
