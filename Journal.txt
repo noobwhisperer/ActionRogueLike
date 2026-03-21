@@ -1135,4 +1135,17 @@ END TSH-ASIDE FIX BOT SPAWNING - It's broken only because we skipped a bunch of 
 
 commit : TSH-ASIDE FIX BOT SPAWNING
 
-Lecture 15.2 :
+Lecture 15.2 : Refining Player Respawns
+
+	+ add code to the SGameModeBase to implement player respawning
+		11:30 : He notes that we are creating the Main HUD in the PlayerCharacter's BeginPlay Event... yeah, this is crap and
+		we should fix it. Not sure why, but he doesn't want to fix it right now.
+	+ so , basically the HealthBar HUD and main HUD are fouled up at the moment, but we don't care enough to fix them I guess.
+	+ testing in game...
+		- not only is the HUD broken, but the dead player bodies do not get destroyed... might make sense to keep them around
+			but place into "dead state". But current implementation is a hot mess ... the AI still target the bodies on the
+			ground. If desirable to keep the bodies around, the usual game dev approach is to swap them for a lighter weight proxy
+			object (e.g. just a mesh in the death pose).
+
+commit : Lecture 15.2 : Refining Player Respawns
+

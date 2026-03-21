@@ -2,6 +2,8 @@
 
 #include "SAttributeComponent.h"
 
+#include "SGameModeBase.h"
+
 
 USAttributeComponent::USAttributeComponent()
 {
@@ -30,7 +32,6 @@ bool USAttributeComponent::IsAlive() const
 
 bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, int32 Delta)
 {
-
 	if (!GetOwner()->CanBeDamaged())
 	{
 		return false;
@@ -43,6 +44,21 @@ bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, int32 Delt
 	int32 ActualDelta = Health - OldHealth;
 	OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
 
-	return ActualDelta != 0;
 
+	//check for death
+	//note: this is a bit of a code smell, but for now we can use this to notify the
+	//gamemode of kills and deaths, which will be used for spawn logic and eventually
+	//kill credit and score tracking (server auth etc)
+
+	if (ActualDelta < 0 && Health == 0)
+	{
+		ASGameModeBase* GM = GetWorld()->GetAuthGameMode<ASGameModeBase>();
+		if (GM)
+		{
+			GM->OnActorKilled(GetOwner(), InstigatorActor);
+		}
+	}
+
+
+	return ActualDelta != 0;
 }

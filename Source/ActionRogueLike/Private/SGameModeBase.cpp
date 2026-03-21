@@ -9,14 +9,32 @@
 #include "SAttributeComponent.h"
 #include "EngineUtils.h"
 #include "DrawDebugHelpers.h"
+#include "SCharacter.h"
 
 
-
-#pragma optimize("",off)
+//#pragma optimize("",off)
 
 ASGameModeBase::ASGameModeBase()
 {
 	SpawnTimerInterval = 2.0f;
+}
+
+void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* KillerActor)
+{
+	ASCharacter* Player = Cast<ASCharacter>(VictimActor);
+	if (Player)
+	{
+		FTimerHandle TimerHandle_RespawnDelay;
+
+		FTimerDelegate RespawnDelegate;
+		RespawnDelegate.BindUFunction(this, "RespawnPlayerElapsed", Player->GetController());
+
+		float PlayerRespawnDelay = 20.0f;
+		GetWorldTimerManager().SetTimer(TimerHandle_RespawnDelay, RespawnDelegate, PlayerRespawnDelay, false);
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("OnActorKilled: Victim: %s, Killer: %s"), *GetNameSafe(VictimActor), *GetNameSafe(KillerActor));
+
 }
 
 
@@ -99,4 +117,14 @@ void ASGameModeBase::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryIn
 	}
 }
 
-#pragma optimize("",on)
+void ASGameModeBase::RespawnPlayerElapsed(AController* Controller)
+{
+	if (ensure(Controller))
+	{
+		Controller->UnPossess(); // detaches the controller from the pawn, which will trigger the pawn's death and cleanup
+
+		RestartPlayer(Controller);
+	}
+}
+
+//#pragma optimize("",on)
