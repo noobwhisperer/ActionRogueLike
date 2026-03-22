@@ -1237,4 +1237,53 @@ Lecture 15.3 : Console Variables
 
 commit : Lecture 15.3 : Console Variables
 
+Lecture 15.4 : Assignment 5 (Credit System, EQS Spawning)
+
+	Credit System
+		- credits persist thru death and respawn
+			+ store in a derived class called "PlayState"
+			+ check out gameplay frameworks in UE ... see if we have/use these in UE5
+		- spend/gain credits
+		- kill minion, grants credits
+		- health potion, cost credits
+		- coin pickup, grant credits
+		- hook up the HUD credit widget to display current value
+			+ use an event to receive credit updates
+		- Bonus : randomly spawn coin and health potions thru a level at game start (using EQS)
+
+	Thinking ... Fleshed out design:
+
+		ASPlayerState : APlayerState
+			- add credits
+			- this persists across death/spawn
+			- create a BP derived class, but do most of the work in C++
+
+		Create a "Pick Up" base class ASPickup that derives from AActor and ISGameplayInterface
+			- implements common code for the interact implementation and recharge timer
+			- children will implement derived methods for DoInteract and RechargeCompleted
+			- If we want to accept requirement that all pickups have a base mesh and material that uses scalar parameter "IsEmpty"
+				we can place this into the base class as well.
+			- note: class hierachy is getting "deep" .... I have mixed feelings about it.
+
+		Refactor ASHealthPotion to use the new ASPickup base class
+			- consider renaming to ASHealthPickup , but renames are tangled and the redirector stuff seem cantankerous.
+			- yeah - maybe just create a whole new class for the potion and don't try to update/save any existing health potion
+				instances ... renaming is a challenge in UE (still!)
+
+		Create a ASCreditPickup use the new ASPickup base class
+
+		Trigger events from the Pickups to update "listeners"
+			- I want to think about this for a bit and come back to it.
+			- example: current health potion needs a response from the InstigatorPawn to know whether to reset the timer
+				... possibly same for credits (e.g. if there's a max credits). Events are not as clean for this situ
+
+		Awarding Kill Credits
+			- add code to do this in the ASAICharacter::OnHealthChanged
+			- add method to retrieve the ASPlayerState from the Player's ASCharacter if needed ... exact details TBD
+
+		Thinking ahead to networking, I'm wondering if the Attributes belong in the PlayerState rather than on the Character
+			- just food for though for now.
+
+
+
 
