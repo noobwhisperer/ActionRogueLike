@@ -1285,5 +1285,6 @@ Lecture 15.4 : Assignment 5 (Credit System, EQS Spawning)
 			- just food for though for now.
 
 
+commit : Lecture 15.4 : Assignment 5 - WIP
 
-
+commit : Lecture 15.4 : Assignment 5 - WIP -- deleted some old assets and code pieces
