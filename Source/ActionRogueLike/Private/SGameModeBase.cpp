@@ -11,6 +11,7 @@
 #include "DrawDebugHelpers.h"
 #include "SCharacter.h"
 
+static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("roguelike.SpawnBots"), true, TEXT("Enable spawning of bots via timer."), ECVF_Cheat);
 
 //#pragma optimize("",off)
 
@@ -65,6 +66,15 @@ void ASGameModeBase::KillAll()
 
 void ASGameModeBase::SpawnBotTimerElapsed()
 {
+
+	//note: does this get completely compiled out on shipping builds? if not, we should add a check for that as well
+	if( !CVarSpawnBots.GetValueOnGameThread() )
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Bot spawning is disabled via console variable. Skipping bot spawn."));
+		return;
+	}
+
+
 	int32 NrOfAliveBots = 0;
 	for (TActorIterator<ASAICharacter> It(GetWorld()); It; ++It)
 	{

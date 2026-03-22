@@ -215,6 +215,13 @@ void ASCharacter::DebugDrawRotationViz() const
 	DrawDebugDirectionalArrow(GetWorld(), LineStart, ControllerDirection_LineEnd, DrawScale, FColor::Green, false, 0.0f, 0, Thickness);
 }
 
+FVector ASCharacter::GetPawnViewLocation() const
+{
+	FVector CameraLoc = CameraComp->GetComponentLocation();
+	CameraLoc = CameraLoc + 50.0f * CameraComp->GetForwardVector();
+	return CameraLoc;
+}
+
 
 void ASCharacter::Tick(float DeltaTime)
 {

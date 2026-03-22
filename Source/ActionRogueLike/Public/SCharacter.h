@@ -87,6 +87,7 @@ protected:
 
 	void DebugDrawRotationViz() const;
 
+	virtual FVector GetPawnViewLocation() const override;
 
 public:
 

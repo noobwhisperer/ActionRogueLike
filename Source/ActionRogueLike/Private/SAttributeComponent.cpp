@@ -4,6 +4,7 @@
 
 #include "SGameModeBase.h"
 
+static TAutoConsoleVariable<float> CVarDamageMultiplier(TEXT("roguelike.DamageMultiplier"), 1.0f, TEXT("Global multiplier for damage taken."), ECVF_Cheat);
 
 USAttributeComponent::USAttributeComponent()
 {
@@ -32,9 +33,14 @@ bool USAttributeComponent::IsAlive() const
 
 bool USAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, int32 Delta)
 {
-	if (!GetOwner()->CanBeDamaged())
+	if (!GetOwner()->CanBeDamaged() && Delta < 0)
 	{
 		return false;
+	}
+
+	if (Delta < 0)
+	{
+		Delta = FMath::RoundToInt(Delta * CVarDamageMultiplier.GetValueOnGameThread()); // apply damage multiplier from console variable
 	}
 
 	int32 OldHealth = Health;

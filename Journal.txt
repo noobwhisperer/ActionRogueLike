@@ -1149,3 +1149,92 @@ Lecture 15.2 : Refining Player Respawns
 
 commit : Lecture 15.2 : Refining Player Respawns
 
+Lecture 15.3 : Console Variables
+
+	+ SGameModeBase : add console variable to change the max number of spawn bots
+		- TAutoConsoleVariable<bool> to create a static variable in the .cpp
+			> Hmmm - so it's only available in this TU , but remember UE uses unity builds, so names
+				might need to be unique across the project to avoid issues.
+		- use ECVF_Cheat to prevent it from being available in shipping builds
+	+ USAttributeComponent : Add damage multiplier
+	+ USInteractionComponent : add DrawInteractionDebug bool
+	+ note: cvar values persist across PIE sessions!
+
+	Blueprint Function Libraries
+		+ create BP Library SGameplayFunctionLibrary
+		+ added ApplyDamage and ApplyDirectionalDamage
+		+ note: reagrding passing arguments to BP functions
+			- pass by ref is regarded as input/output, you'll get input and output pins in BP nodes
+			- pass by const ref is regarded as input only (you'll get just an input pin)
+		+ update SMagicProjectile::OnActorOverlap
+			- use the new BP Library function to apply damage
+
+
+	Test in PIE
+		+ notice we are hitting the capsule component of the AI , not the mesh. We want to fix this
+
+	Fix the projectile collision with AI:
+
+		+ Goto the MinionRangedBP and peek at the capsule's collision settings
+		+ He discussed the SNAFUs that we begin to encounter with this UE collision dispatching system
+		+ for now, set the AI capsule to ignore world dynamic channel so the projectile will pass thru the
+			capsule and possibly hit the mesh
+			- he chooses do to this in C++ ctor for the AI :
+
+				GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
+				GetMesh()->SetGenerateOverlapEvents(true);
+
+		+ Test in PIE
+			- no bots !!
+			- investigating...
+			- ok , they fell through the floor
+			- the collision updates caused the bots to fall thru the floor... my floor is set as a world dynamic object
+			- fix the floor - BlockAll
+			- tested again ... now it seems to be working but I don't see the impulse response... set breakpoint and peek
+			- damage works, still no impulse ... the AI skeletal mesh is not simulating physics so we don't reach the Add Impulse code
+			- WTF is going on here?? Okay, I figured it out.
+
+				14:40 to 16:32 of video ... our code looks something like this when finished:
+
+					bool USGameplayFunctionLibrary::ApplyDirectionalDamage(AActor* InstigatorActor, AActor* TargetActor, int32 DamageAmount, const FHitResult& HitResult)
+					{
+						if(ApplyDamage(InstigatorActor, TargetActor, DamageAmount))
+						{
+							UPrimitiveComponent* HitComp = HitResult.GetComponent();
+							if(HitComp && HitComp->IsSimulatingPhysics(HitResult.BoneName))
+							{
+								FVector ShotDirection = HitResult.ImpactPoint - InstigatorActor->GetActorLocation();
+								ShotDirection.Normalize();
+								HitComp->AddImpulseAtLocation(ShotDirection * DamageAmount * 100.0f, HitResult.ImpactPoint);
+							}
+							return true;
+						}
+
+						return false;
+					}
+
+				So the conditions required to arrive at the code section that actually applies the impulse requires our ASAICharacter Skeletal Mesh
+				to be simulating physics, BUT IT IS NOT ... it's animating ... until the last hit where the character is dead and the skeletal mesh
+				is set to simulate physics (ragdoll).
+
+				It's not super clear from the video, but our intention is to only apply the impulse when the hit character's mesh is in "ragdoll",
+				although I suspect if there were blended dynamics/animation it would also apply the impulse.
+			- so, is it working?
+				> not so fast .... sometimes getting an exception ... getting into the impulse code for cases where InstigatorActor is nullptr
+				> traced this back to the AI spawning it's projectile in BT and not registering itself as the instigator - Tom had this but I missed it (in lecture I skipped)
+				> ok fixed.
+			- ok, now it's working great ... OSB captured a little clip of it.
+
+	22:56 : next we fix the AI leaving his collision capsule behind when he dies.
+
+	25:00 : fix the parallax issue with the interaction sweep
+		- add this override : virtual FVector GetPawnViewLocation() const override; to the ASCharacter
+
+	28:27 : fix the God mode issue where it doesn't let you heal if in God mode (I mentioned this earlier)
+
+	28:39 : create a PlayerController class
+		- partially fix the HUD issue by moving it's creation into the new PlayerControllerBP
+
+commit : Lecture 15.3 : Console Variables
+
+
