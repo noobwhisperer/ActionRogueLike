@@ -1329,4 +1329,9 @@ commit : fixed ASHeatlhPotionPickup and manually cleaned up all redirectors
 
 	Implemented code and BP for the Coin Pickup ... easy-peasy ... very similar to healing potion, except easier.
 
-commit : Lecture 15.4 : Assignment 5 - WIP -- health potions working
+commit : Lecture 15.4 : Assignment 5 - WIP -- Coin Pickup working
+
+	Implemented code and BP changes to get the Credits HUD Widget working
+
+commit : Lecture 15.4 : Assignment 5 - WIP -- Credits HUD Widget working
+	
