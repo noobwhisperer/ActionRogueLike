@@ -1,16 +1,16 @@
-// file: SHeatlhPotionPickup.h
+// file: SHealingPotionPickup.h
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Pickups/SPickupBase.h"
-#include "SHeatlhPotionPickup.generated.h"
+#include "SHealingPotionPickup.generated.h"
 
 /**
  * A health potion pickup that restores health to the instigator pawn.
  */
 UCLASS(Blueprintable)
-class ACTIONROGUELIKE_API ASHeatlhPotionPickup : public ASPickupBase
+class ACTIONROGUELIKE_API ASHealingPotionPickup : public ASPickupBase
 {
 	GENERATED_BODY()
 	

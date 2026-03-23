@@ -1,12 +1,12 @@
-// file: SHeatlhPotionPickup.cpp
+// file: SHealingPotionPickup.cpp
 
-#include "Pickups/SHeatlhPotionPickup.h"
+#include "Pickups/SHealingPotionPickup.h"
 
 #include "SAttributeComponent.h"
 #include "SPlayerState.h"
 
 
-bool ASHeatlhPotionPickup::DoPickup(APawn* InstigatorPawn)
+bool ASHealingPotionPickup::DoPickup(APawn* InstigatorPawn)
 {
 	check(InstigatorPawn);
 
