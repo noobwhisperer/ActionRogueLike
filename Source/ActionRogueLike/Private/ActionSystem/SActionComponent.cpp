@@ -9,27 +9,29 @@ USActionComponent::USActionComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
 void USActionComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	for(TSubclassOf<USAction> ActionClass : DefaultActionTypes)
+	{
+		AddAction(ActionClass);
+	}
 }
 
 
 void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
 }
 
-void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)
+
+void USActionComponent::AddAction(TSubclassOf<USAction> ActionClass)
 {
 	if(!ensure(ActionClass))
 	{
 		return;
 	}
-
 
 	USAction* NewAction = NewObject<USAction>(this, ActionClass);
 	if(ensure(NewAction))
@@ -40,8 +42,12 @@ void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> Acti
 
 bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 {
+
+	//UE_LOG(LogTemp,Warning, TEXT("Searching for Action %s"), *ActionName.ToString());
+
 	for(USAction* Action : Actions)
 	{
+		//UE_LOG(LogTemp,Warning, TEXT("   ...found Action %s"), *Action->ActionName.ToString());
 		if(Action && Action->ActionName == ActionName)
 		{
 			Action->StartAction(Instigator);
@@ -63,4 +69,3 @@ bool USActionComponent::StopActionByName(AActor* Instigator, FName ActionName)
 	}
 	return false;
 }
-

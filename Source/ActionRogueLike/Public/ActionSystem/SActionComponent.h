@@ -20,7 +20,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Actions")
-	void AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass);
+	void AddAction(TSubclassOf<USAction> ActionClass);
 
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 	bool StartActionByName(AActor* Instigator, FName ActionName);
@@ -29,6 +29,11 @@ public:
 	bool StopActionByName(AActor* Instigator, FName ActionName);
 
 protected:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Actions")
+	TArray<TSubclassOf<USAction>> DefaultActionTypes;
+
+
 	UPROPERTY(EditDefaultsOnly, Category = "Actions")
 	TArray<USAction*> Actions;
 

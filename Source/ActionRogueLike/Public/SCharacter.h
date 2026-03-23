@@ -19,33 +19,6 @@ class ACTIONROGUELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> ProjectileClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> BlackHoleProjectialClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	TSubclassOf<AActor> TeleportProjectialClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	float TargetDistance = 3000.0f;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	float AttackAnimDelay = 0.2f;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
-	UAnimMontage* AttackAnimMontage;
-
-	UPROPERTY(EditAnywhere, Category = "Damage")
-	FColor DamageColor = FColor::Red;
-
-	UPROPERTY(EditAnywhere, Category = "Damage")
-	float DamageSpeed = 1.0f;
-
-	FTimerHandle TimerHandle_PrimaryAttack;
-	FTimerHandle TimerHandle_BlackHoleAttack;
-	FTimerHandle TimerHandle_DashAttack;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -64,10 +37,8 @@ protected:
 
 	virtual void PostInitializeComponents() override;
 
-
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, int32 NewHealth, int32 Delta);
-
 
 	virtual void BeginPlay() override;
 
@@ -82,15 +53,7 @@ protected:
 	void BlackHoleAttack();
 	void TeleportAttack();
 
-	void PrimaryAttack_TimeElapsed();
-	void BlackHoleAttack_TimeElapsed();
-	void TeleportAttack_TimeElapsed();
-
 	void PrimaryInteract();
-
-	FTransform ComputeProjectileLaunchTransform() const;
-
-	void SpawnProjectile(TSubclassOf<AActor> ProjectileToSpawn);
 
 	void DebugDrawRotationViz() const;
 

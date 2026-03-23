@@ -5,7 +5,6 @@
 #include "DrawDebugHelpers.h"
 #include "SInteractionComponent.h"
 #include "SAttributeComponent.h"
-#include "TimerManager.h"
 #include "ActionSystem/SActionComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
@@ -32,7 +31,6 @@ ASCharacter::ASCharacter()
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
 	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 	ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
-
 
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -112,36 +110,17 @@ void ASCharacter::SprintStop()
 
 void ASCharacter::PrimaryAttack()
 {
-	PlayAnimMontage(AttackAnimMontage);
-
-	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, AttackAnimDelay);
+	ActionComp->StartActionByName(this, "PrimaryAttack");
 }
 
 void ASCharacter::BlackHoleAttack()
 {
-	PlayAnimMontage(AttackAnimMontage);
-	GetWorldTimerManager().SetTimer(TimerHandle_BlackHoleAttack, this, &ASCharacter::BlackHoleAttack_TimeElapsed, AttackAnimDelay);
+	ActionComp->StartActionByName(this, "BlackHole");
 }
 
 void ASCharacter::TeleportAttack()
 {
-	PlayAnimMontage(AttackAnimMontage);
-	GetWorldTimerManager().SetTimer(TimerHandle_DashAttack, this, &ASCharacter::TeleportAttack_TimeElapsed, AttackAnimDelay);
-}
-
-void ASCharacter::PrimaryAttack_TimeElapsed()
-{
-	SpawnProjectile(ProjectileClass);
-}
-
-void ASCharacter::BlackHoleAttack_TimeElapsed()
-{
-	SpawnProjectile(BlackHoleProjectialClass);
-}
-
-void ASCharacter::TeleportAttack_TimeElapsed()
-{
-	SpawnProjectile(TeleportProjectialClass);
+	ActionComp->StartActionByName(this, "Dash");
 }
 
 void ASCharacter::PrimaryInteract()
@@ -149,65 +128,6 @@ void ASCharacter::PrimaryInteract()
 	check(InteractionComp); //note: I cho
 
 	InteractionComp->PrimaryInteract();
-}
-
-FTransform ASCharacter::ComputeProjectileLaunchTransform() const
-{
-	FHitResult OutHitResult;
-
-	FCollisionObjectQueryParams ObjectQueryParams;
-	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
-	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
-	ObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
-
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-
-	FVector CameraLocation = CameraComp->GetComponentLocation();
-	FVector CameraDirection = CameraComp->GetForwardVector();
-	//	float TargetDistance = 3000.0f;
-
-	FVector TargetLocation = CameraLocation + TargetDistance * CameraDirection;
-
-	GetWorld()->LineTraceSingleByObjectType(OutHitResult, CameraLocation, TargetLocation, ObjectQueryParams, QueryParams);
-
-	if (OutHitResult.bBlockingHit)
-	{
-		TargetLocation = OutHitResult.ImpactPoint;
-	}
-
-	FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-
-	FVector ProjectileForward = TargetLocation - RightHandLocation;
-	ProjectileForward.Normalize();
-
-	FRotator ProjectileRotation = FRotationMatrix::MakeFromXZ(ProjectileForward, FVector(0.0f, 0.0f, 1.0f)).Rotator();
-
-
-	//temp hack - debugging
-	//RightHandLocation.Z = RightHandLocation.Z + 100.0;
-
-	FTransform SpawnTM = FTransform(ProjectileRotation, RightHandLocation);
-
-
-	// debugging : draw the query line and the projectile trajectory ... reveals "parallax"
-	//
-	// const float Lifetime = 2.0f;
-	// FColor LineColor = OutHitResult.bBlockingHit ? FColor::Green : FColor::Red;
-	// DrawDebugLine(GetWorld(), (CameraLocation + 20.0f * CameraDirection), TargetLocation, LineColor, false, Lifetime, 0, 0.0f);
-	// DrawDebugLine(GetWorld(), RightHandLocation, TargetLocation, FColor::Blue, false, Lifetime, 0, 0.0f);
-
-	return SpawnTM;
-}
-
-void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ProjectileToSpawn)
-{
-	if (!ensure(ProjectileToSpawn)) return;
-	FTransform SpawnTM = ComputeProjectileLaunchTransform();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	GetWorld()->SpawnActor<AActor>(ProjectileToSpawn, SpawnTM, SpawnParams);
 }
 
 void ASCharacter::DebugDrawRotationViz() const
@@ -235,7 +155,6 @@ FVector ASCharacter::GetPawnViewLocation() const
 	CameraLoc = CameraLoc + 50.0f * CameraComp->GetForwardVector();
 	return CameraLoc;
 }
-
 
 void ASCharacter::Tick(float DeltaTime)
 {
@@ -267,8 +186,6 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ASCharacter::SprintStart);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASCharacter::SprintStop);
-
-
 }
 
 void ASCharacter::HealSelf(int32 Amount /* = 100 */)

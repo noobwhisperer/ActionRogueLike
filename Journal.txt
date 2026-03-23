@@ -1353,7 +1353,6 @@ commit : Lecture 15.4 : Assignment 5 - WIP -- Implemented code and BP changes to
 
 commit : Lecture 15.4 : Assignment 5 - Completed
 
-
 Lecture 16 : Writing our own "Gameplay Ability System" alternative
 
 Lecture 16.1 : Overview
@@ -1374,6 +1373,12 @@ Lecture 16.2 : Starting our Action System and first "Action" , Sprinting
 		+ notice his approach may be susceptible to round-off hacking
 		+ give the player character the sprint action in it's BP BeginPlay
 
-
-
 commit : Lecture 16.2 : Starting our Action System and first "Action" , Sprinting
+
+Lecture 16.3 : Converting Projectile Attacks
+
+	- convert all the old projectile spawning code into refactored code that uses the Action System
+	- completed ... easy...peasy
+
+commit : Lecture 16.3 : Converting Projectile Attacks
+
