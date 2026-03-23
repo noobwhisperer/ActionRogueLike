@@ -3,21 +3,19 @@
 
 #include "Pickups/SCreditsPickup.h"
 
-
-
+#include "SPlayerState.h"
 
 
 bool ASCreditsPickup::DoPickup(APawn* InstigatorPawn)
 {
 	check(InstigatorPawn);
 
-	// USAttributeComponent* AttComp = InstigatorPawn->GetComponentByClass<USAttributeComponent>();
+    ASPlayerState* PlayerState = InstigatorPawn->GetPlayerState<ASPlayerState>();
+    check(PlayerState);
 
-	bool bPickedUp = false;
+    bool bCreditsAdjusted = PlayerState->AdjustCredits(CreditAmount);
 
-	//TODO: Add checks for Credits and apply the credit pickup to the InstigatorPawn's PlayerState if result does not exceed max credits
+    UE_LOG(LogTemp, Log, TEXT(" Attempted Credit Pick up ... Player credits = %d"), PlayerState->GetCredits() );
 
-
-
-	return bPickedUp;
+    return bCreditsAdjusted;
 }

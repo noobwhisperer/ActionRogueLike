@@ -1298,3 +1298,35 @@ commit : Lecture 15.4 : Assignment 5 - WIP -- deleted some old assets and code p
 
 
 commit : Lecture 15.4 : Assignment 5 - WIP -- health potions working
+
+	continuing .... need to fix name mis-spelled in class ASHeatlhPotionPickup
+	done, tested ... but yeah there's a redirect added to the DefaultEngine.ini ... 
+
+	Asked Claude ... steps to make these name changes :
+
+		Load the project with the redirect in place
+		Open and resave all affected assets (the BP derived classes in your case)
+		Remove the redirect from DefaultEngine.ini
+		Verify everything still loads correctly
+
+		The risk is if you miss resaving any assets — they'll break when the redirect is removed.
+		With only a small number of BP instances in your project that should be manageable.
+
+	Ok ... I fixed up the redirectors manually ... loks like this is still a "hot mess" in UE5.6
+			[CoreRedirects]
+			+ClassRedirects=(OldName="/Script/ActionRogueLike.SProjectile",NewName="/Script/ActionRogueLike.SProjectileBase")
+			+ClassRedirects=(OldName="/Script/ActionRogueLike.STeleportProjectile",NewName="/Script/ActionRogueLike.SDashProjectile")
+			+ClassRedirects=(OldName="/Script/ActionRogueLike.SBarrel",NewName="/Script/ActionRogueLike.SExplosiveBarrel")
+			+PropertyRedirects=(OldName="/Script/ActionRogueLike.SProjectileBase.NiagaraComp",NewName="/Script/ActionRogueLike.SProjectileBase.EffectComp")
+			+PropertyRedirects=(OldName="/Script/ActionRogueLike.SProjectileBase.MovementComp",NewName="/Script/ActionRogueLike.SProjectileBase.MoveComp")
+			+PropertyRedirects=(OldName="/Script/ActionRogueLike.SDashProjectile.MotionTimer",NewName="/Script/ActionRogueLike.SDashProjectile.DetonationTimer")
+			+ClassRedirects=(OldName="/Script/ActionRogueLike.SHeatlhPotionPickup",NewName="/Script/ActionRogueLike.SHealingPotionPickup")
+
+	I just commented them our in the DefaultEngine.ini for now, in case there's something broken that I missed in my test
+
+
+commit : fixed ASHeatlhPotionPickup and manually cleaned up all redirectors
+
+	Implemented code and BP for the Coin Pickup ... easy-peasy ... very similar to healing potion, except easier.
+
+commit : Lecture 15.4 : Assignment 5 - WIP -- health potions working

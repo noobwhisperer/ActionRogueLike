@@ -33,7 +33,7 @@ bool ASHealingPotionPickup::DoPickup(APawn* InstigatorPawn)
 		check(bCreditsCharged)
 
 		// potion purchased and applied
-		UE_LOG(LogTemp, Log, TEXT("HealthPotion purchased and applied!"));
+		UE_LOG(LogTemp, Log, TEXT("HealthPotion purchased and applied! Player now has %d credits left"), PlayerState->GetCredits());
 		return true;
 	}
 
