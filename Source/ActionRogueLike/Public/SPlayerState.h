@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class ACTIONROGUELIKE_API ASPlayerState : public APlayerState
 {
 	GENERATED_BODY()

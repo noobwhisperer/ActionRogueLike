@@ -15,9 +15,18 @@ class ACTIONROGUELIKE_API ASHeatlhPotionPickup : public ASPickupBase
 	GENERATED_BODY()
 	
 protected:
-	
+
+	/// <summary>
+	/// Amount of healing for this pickup
+	/// </summary>
 	UPROPERTY(EditDefaultsOnly, Category = "Pickup")
-	int32 HealingAmount;
+	int32 HealingAmount = 0;
+
+	/// <summary>
+	/// price of this pickup in Credits
+	/// </summary>
+	UPROPERTY(EditDefaultsOnly, Category = "Pickup")
+	int32 CreditCost = 0;
 
 public:
 

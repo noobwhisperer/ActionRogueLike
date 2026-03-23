@@ -1288,3 +1288,13 @@ Lecture 15.4 : Assignment 5 (Credit System, EQS Spawning)
 commit : Lecture 15.4 : Assignment 5 - WIP
 
 commit : Lecture 15.4 : Assignment 5 - WIP -- deleted some old assets and code pieces
+
+	Compile and run.
+	First attempt to use the new health potion hit exception grabbing the PlayerState ... probably forgot to "wire up"
+		the correct class type to GameMode ... checking ...
+	ok - fixed.
+	also made PlayerStateBP derived from our C++ class so we can override the initial data
+	tested all ... works now.
+
+
+commit : Lecture 15.4 : Assignment 5 - WIP -- health potions working
