@@ -1338,8 +1338,20 @@ commit : Lecture 15.4 : Assignment 5 - WIP -- Credits HUD Widget working
 	Implemented code and BP changes to award kill points. Currently, the reward amount is fixed regardless of enemy type, and the
 	reward amount is set in the GameMode BP . I can make this more complex later if needed (lookup table based on enemy tier, etc.)
 
-	only one issue ... the barrel does something fancy, an explosion that affects all neighboring enemies and players. I need to
-	properly propagate the Instigator from the projectile to the custom radial force so credit gets awarded properly
-	
+	only one issue ... my barrel does something fancy, an explosion that affects all neighboring enemies and players. I need to
+	properly propagate the Instigator from the projectile to the custom radial force so credit gets awarded properly. I'll fix
+	as a separate commit.
+
+commit : Lecture 15.4 : Assignment 5 - WIP -- Implemented code and BP changes to award kill points
+
+	Fix propagation of Instigator for barrel explosion
+		- basic problem is that USRadialForceComponent derives from URadialForceComponent and overrides FireImpulse, which
+			has no mechanism to apply an Instigator
+		- Add Instigator to my custom USRadialForceComponent class and propagate it.
+		- Notice... you could end up receiving credits for suicide with this implementation
+
+
+commit : Lecture 15.4 : Assignment 5 - Completed
+
 
 

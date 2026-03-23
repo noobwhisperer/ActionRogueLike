@@ -8,9 +8,6 @@
 
 static TAutoConsoleVariable<float> CVarDeathImpulseMultiplier(TEXT("roguelike.DeathImpulseMultiplier"), 2000.0f, TEXT("Global multiplier for damage taken."), ECVF_Cheat);
 
-
-#pragma optimize("",off)
-
 bool USGameplayFunctionLibrary::ApplyDamage(AActor* InstigatorActor, AActor* TargetActor, int32 DamageAmount)
 {
 	USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(TargetActor);
@@ -54,6 +51,3 @@ bool USGameplayFunctionLibrary::ApplyDirectionalDamage(AActor* InstigatorActor, 
 
 	return false;
 }
-
-
-#pragma optimize("",on)

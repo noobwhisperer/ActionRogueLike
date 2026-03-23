@@ -3,13 +3,8 @@
 
 #include "SMagicProjectile.h"
 
-#include "SAttributeComponent.h"
 #include "SGameplayFunctionLibrary.h"
 #include "Components/SphereComponent.h"
-
-
-#pragma optimize("",off)
-
 
 ASMagicProjectile::ASMagicProjectile()
 {
@@ -22,21 +17,9 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	if (OtherActor && OtherActor != GetInstigator())
 	{
-		// USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
-		// if( AttributeComp)
-		// {
-		// 	AttributeComp->ApplyHealthChange(GetInstigator(), -DamageAmount);
-		// 	Explode();
-		// }
-
-
-
-
 		if(USGameplayFunctionLibrary::ApplyDirectionalDamage(GetInstigator(), OtherActor, DamageAmount, SweepResult))
 		{
 			Explode();
 		}
 	}
 }
-
-#pragma optimize("",on)

@@ -8,7 +8,6 @@
 #include "Engine/OverlapResult.h"
 #include "GameFramework/MovementComponent.h"
 
-
 void USRadialForceComponent::FireImpulse()
 {
 	//dont call super - we re-implement the whole thing here
@@ -58,7 +57,7 @@ void USRadialForceComponent::FireImpulse()
 
 	for (USAttributeComponent* AttributeComp : AffectedAttributeComponents)
 	{
-		AttributeComp->ApplyHealthChange(GetOwner(), -RadialForceDamage);
+		AttributeComp->ApplyHealthChange(Instigator, -RadialForceDamage);
 	}
 
 	for (UPrimitiveComponent* PrimitiveComponent : AffectedComponents)

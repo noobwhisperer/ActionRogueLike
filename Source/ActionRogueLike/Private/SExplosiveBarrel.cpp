@@ -19,7 +19,7 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 
 	// configure the radial force - defaults
 	ExplosionForceComp->Radius = 1000.0f;
-	ExplosionForceComp->RadialForceDamage = 20.0f;
+	ExplosionForceComp->RadialForceDamage = 20;
 	ExplosionForceComp->ImpulseStrength = 200000.0f;
 	ExplosionForceComp->bImpulseVelChange = false;
 	ExplosionForceComp->bAutoActivate = false;
@@ -37,8 +37,12 @@ void ASExplosiveBarrel::OnBarrelHit(UPrimitiveComponent* HitComponent, AActor* O
 	const FHitResult& Hit)
 {
 	ASMagicProjectile* MagicProjectile = Cast<ASMagicProjectile>(OtherActor);
+	AActor* InstigatorActor = nullptr;
+
 	if (MagicProjectile)
 	{
+		InstigatorActor = MagicProjectile->GetInstigator();
+		ExplosionForceComp->Instigator = InstigatorActor;
 		ExplosionForceComp->FireImpulse();
 	}
 
@@ -50,8 +54,9 @@ void ASExplosiveBarrel::OnBarrelHit(UPrimitiveComponent* HitComponent, AActor* O
 			UE_LOG(LogTemp, Warning, TEXT("Barrel hit by: %s"), *OtherActor->GetName());
 		}
 		UE_LOG(LogTemp, Log, TEXT("OnBarrelHit in ASExplosiveBarrel class!"));
-		UE_LOG(LogTemp, Warning, TEXT("Other Actor = %s, at game time = %f"), *GetNameSafe(OtherActor), GetWorld()->TimeSeconds);
+		UE_LOG(LogTemp, Warning, TEXT("Other Actor = %s, Instigator = %s, at game time = %f"), *GetNameSafe(OtherActor), *GetNameSafe(InstigatorActor), GetWorld()->TimeSeconds);
 		FString CombinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
 		DrawDebugString(GetWorld(), Hit.ImpactPoint + FVector(0.0f, 0.0f, 150.0f), CombinedString, nullptr, FColor::Orange, 2.0f, true);
 	}
 }
+
