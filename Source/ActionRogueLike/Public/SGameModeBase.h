@@ -39,6 +39,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	int32 MaxBotCount = 3;
 
+	/// <summary>
+	/// Credits rewarded to the player for killing an enemy.
+	/// </summary>
+	UPROPERTY(EditDefaultsOnly, Category = "Credits")
+	int32 KillCreditReward = 0;
+
 	UFUNCTION()
 	void SpawnBotTimerElapsed();
 

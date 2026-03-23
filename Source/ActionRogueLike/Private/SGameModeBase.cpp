@@ -10,6 +10,7 @@
 #include "EngineUtils.h"
 #include "DrawDebugHelpers.h"
 #include "SCharacter.h"
+#include "SPlayerState.h"
 
 static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("roguelike.SpawnBots"), true, TEXT("Enable spawning of bots via timer."), ECVF_Cheat);
 
@@ -22,13 +23,29 @@ ASGameModeBase::ASGameModeBase()
 
 void ASGameModeBase::OnActorKilled(AActor* VictimActor, AActor* KillerActor)
 {
-	ASCharacter* Player = Cast<ASCharacter>(VictimActor);
-	if (Player)
+	// If killer is player, give them credit for the kill.
+
+	ASCharacter* PlayerKiller = Cast<ASCharacter>(KillerActor);
+
+    if (PlayerKiller)
+    {
+        ASPlayerState* PS = PlayerKiller->GetPlayerState<ASPlayerState>();
+        if (PS)
+        {
+            PS->AdjustCredits(KillCreditReward);
+        }
+    }
+
+
+	// If victim is player, start respawn timer for them.
+
+	ASCharacter* PlayerVictim = Cast<ASCharacter>(VictimActor);
+	if (PlayerVictim)
 	{
 		FTimerHandle TimerHandle_RespawnDelay;
 
 		FTimerDelegate RespawnDelegate;
-		RespawnDelegate.BindUFunction(this, "RespawnPlayerElapsed", Player->GetController());
+		RespawnDelegate.BindUFunction(this, "RespawnPlayerElapsed", PlayerVictim->GetController());
 
 		float PlayerRespawnDelay = 20.0f;
 		GetWorldTimerManager().SetTimer(TimerHandle_RespawnDelay, RespawnDelegate, PlayerRespawnDelay, false);
