@@ -1312,7 +1312,7 @@ commit : Lecture 15.4 : Assignment 5 - WIP -- health potions working
 		The risk is if you miss resaving any assets — they'll break when the redirect is removed.
 		With only a small number of BP instances in your project that should be manageable.
 
-	Ok ... I fixed up the redirectors manually ... loks like this is still a "hot mess" in UE5.6
+	Ok ... I fixed up the redirectors manually ... looks like this is still a "hot mess" in UE5.6
 			[CoreRedirects]
 			+ClassRedirects=(OldName="/Script/ActionRogueLike.SProjectile",NewName="/Script/ActionRogueLike.SProjectileBase")
 			+ClassRedirects=(OldName="/Script/ActionRogueLike.STeleportProjectile",NewName="/Script/ActionRogueLike.SDashProjectile")
@@ -1354,4 +1354,26 @@ commit : Lecture 15.4 : Assignment 5 - WIP -- Implemented code and BP changes to
 commit : Lecture 15.4 : Assignment 5 - Completed
 
 
+Lecture 16 : Writing our own "Gameplay Ability System" alternative
 
+Lecture 16.1 : Overview
+
+Lecture 16.2 : Starting our Action System and first "Action" , Sprinting
+
+	- introducing "NewObject" !
+		+ Tom: "The 'outer object' is kind of like the owner"
+			> ok, need better description of this. I "think" the owner will "keep it alive" thru GC passes, but I need
+			to verify
+			> verified by google search
+
+	- StartActionByName
+		+ why not use and associative array for the Actions ... seems like the pattern will be infrequent add/removal
+			and frequent start/stop ?
+
+	- implement the sprint action (he keeps calling it ability, but let's call it action for consistency)
+		+ notice his approach may be susceptible to round-off hacking
+		+ give the player character the sprint action in it's BP BeginPlay
+
+
+
+commit : Lecture 16.2 : Starting our Action System and first "Action" , Sprinting

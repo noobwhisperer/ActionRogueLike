@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+class USActionComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class USInteractionComponent;
@@ -55,9 +56,11 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USInteractionComponent* InteractionComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USAttributeComponent* AttributeComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USActionComponent* ActionComp;
 
 	virtual void PostInitializeComponents() override;
 
@@ -70,6 +73,10 @@ protected:
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+
+	void SprintStart();
+	void SprintStop();
+
 
 	void PrimaryAttack();
 	void BlackHoleAttack();
