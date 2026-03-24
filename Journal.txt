@@ -1382,3 +1382,10 @@ Lecture 16.3 : Converting Projectile Attacks
 
 commit : Lecture 16.3 : Converting Projectile Attacks
 
+Lecture 16.4 : Improve physics impulse on bot ragdolls
+
+	- I already improved this, but there's a couple minor changes worth grabbing from Tom
+	- I'm keeping the "vertical" component that I added
+	- I'm keeping the tunable CVar for impulse magnitude multiplier
+
+commit : Lecture 16.4 : Improve physics impulse on bot ragdolls
