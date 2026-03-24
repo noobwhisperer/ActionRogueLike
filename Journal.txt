@@ -1389,3 +1389,13 @@ Lecture 16.4 : Improve physics impulse on bot ragdolls
 	- I'm keeping the tunable CVar for impulse magnitude multiplier
 
 commit : Lecture 16.4 : Improve physics impulse on bot ragdolls
+
+Lecture 17 Gameplay Tags
+
+Lecture 17.1 Setting up Gameplay Tags
+
+	5:00 to about 7:00 .... Huhh !?!?
+
+	- Tag interface is different in UE 5.6
+
+
