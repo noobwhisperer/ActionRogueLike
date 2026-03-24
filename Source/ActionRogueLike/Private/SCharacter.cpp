@@ -100,35 +100,20 @@ void ASCharacter::MoveRight(float Value)
 
 void ASCharacter::SprintStart()
 {
-	if (SprintStartStopCounter == 0)
-	{
-		UE_LOG(LogTemp, Log, TEXT("About to call START SPRINT on the action component. SprintStartStopCounter = %d"), SprintStartStopCounter);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("About to call START SPRINT on the action component. SprintStartStopCounter = %d"), SprintStartStopCounter);
-	}
 	ActionComp->StartActionByName(this, "Sprint");
-	SprintStartStopCounter++;
 }
 
 void ASCharacter::SprintStop()
 {
-	if (SprintStartStopCounter == 1)
-	{
-		UE_LOG(LogTemp, Log, TEXT("About to call STOP SPRINT on the action component. SprintStartStopCounter = %d"), SprintStartStopCounter);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("About to call STOP SPRINT on the action component. SprintStartStopCounter = %d"), SprintStartStopCounter);
-	}
 
 	ActionComp->StopActionByName(this, "Sprint");
-	SprintStartStopCounter--;
 }
 
 void ASCharacter::PrimaryAttack()
 {
+	UE_LOG(LogTemp, Log, TEXT("BUTTON PRIMARY ATTACK PRESSED + + + + + + + + +   About to call START PRIMARYATTACK on the action component."));
+
+
 	ActionComp->StartActionByName(this, "PrimaryAttack");
 }
 
