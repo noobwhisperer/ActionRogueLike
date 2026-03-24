@@ -21,8 +21,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	FName ActionName;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Action")
-	bool bIsRunning;
+	UFUNCTION(BlueprintNativeEvent, Category = "Action")
+	bool CanStart(AActor* Instigator);
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Action")
 	void StartAction(AActor* Instigator);
@@ -31,17 +31,20 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Action")
 	void StopAction(AActor* Instigator);
 
+	UFUNCTION(BlueprintCallable, Category= "Action")
+	bool IsRunning() const;
+
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tags")
 	FGameplayTagContainer GrantsTags;
 
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tags")
 	FGameplayTagContainer BlockedTags;
 
 	UFUNCTION(BlueprintCallable, Category= "Action")
 	USActionComponent* GetOwningComponent() const;
 
+	bool bIsRunning = false;
 	
 };

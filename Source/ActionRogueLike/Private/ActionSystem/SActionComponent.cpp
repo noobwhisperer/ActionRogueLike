@@ -55,6 +55,13 @@ bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 		//UE_LOG(LogTemp,Warning, TEXT("   ...found Action %s"), *Action->ActionName.ToString());
 		if(Action && Action->ActionName == ActionName)
 		{
+			if(!Action->CanStart(Instigator))
+			{
+				FString FailMsg = FString::Printf(TEXT("Failed to run %s"), *ActionName.ToString());
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FailMsg);
+				continue;
+			}
+
 			Action->StartAction(Instigator);
 			return true;
 		}

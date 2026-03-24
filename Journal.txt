@@ -1398,4 +1398,27 @@ Lecture 17.1 Setting up Gameplay Tags
 
 	- Tag interface is different in UE 5.6
 
+	- completed ... easy-peasy
 
+commit : Lecture 17.1 Setting up Gameplay Tags
+
+Lecture 17.2 : Comparing Tags in our Action System
+
+	- add BP Native function CanStart to USAction base class
+
+
+	2:22 Why continue ? are the ActionNames NOT UNIQUE ?
+
+	Uhmmm ... sorry, but this system is starting to smell! The ActionNames are not unique,
+	so when Starts and Stops are triggered by ActionNames alone, it seems completely fragile.
+
+	I'm able to hit the 
+		ensureAlways(bIsRunning); in USAction::StopAction_Implementation
+	easily if I spam sprint and fire primary attack keys repeatedly.
+
+	Other than that, it seems to be working. I think there are some holes in this design though.
+
+	Yep - I try this over and over and easily produce this bug. It may simply be a matter of inputs not guaranteed
+	to come in 
+	
+commit : Lecture 17.2 : Comparing Tags in our Action System

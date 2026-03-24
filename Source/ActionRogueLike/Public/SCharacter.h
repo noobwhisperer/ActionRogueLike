@@ -61,6 +61,8 @@ protected:
 
 public:
 
+	//debug counter to "catch" keyboard press and release parity issue
+	int32 SprintStartStopCounter = 0;
 
 	ASCharacter();
 
