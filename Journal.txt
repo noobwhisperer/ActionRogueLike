@@ -1422,3 +1422,10 @@ Lecture 17.2 : Comparing Tags in our Action System
 	to come in 
 	
 commit : Lecture 17.2 : Comparing Tags in our Action System
+
+	Fixed a bug where spamming the inputs could break the sprint ! I was missing a check for Action->IsRunning
+
+commit : Lecture 17.2 : Bug Fix
+
+Lecture 17.3 Gameplay Tags for DOOM-style Door & Keycard system
+
