@@ -13,9 +13,9 @@ bool ASCreditsPickup::DoPickup(APawn* InstigatorPawn)
     ASPlayerState* PlayerState = InstigatorPawn->GetPlayerState<ASPlayerState>();
     check(PlayerState);
 
-    bool bCreditsAdjusted = PlayerState->AdjustCredits(CreditAmount);
+    PlayerState->AdjustCredits(CreditAmount);
 
     UE_LOG(LogTemp, Log, TEXT(" Attempted Credit Pick up ... Player credits = %d"), PlayerState->GetCredits() );
 
-    return bCreditsAdjusted;
+    return true;
 }

@@ -26,7 +26,9 @@ void ASPickupBase::Interact_Implementation(APawn* InstigatorPawn)
 
 	if(DoPickup(InstigatorPawn))
 	{
-		// Pickup was successful, start recharge timer
+		// Pickup was successful, Hide and Cooldown
+		//	- hide by setting parameter on material .... I don't actually hide it, I just show it as "empty"
+		//	- start recharge timer
 		PickupState = EPickupState::Recharging;
 		BaseMesh->SetScalarParameterValueOnMaterials("IsEmpty", 1.0f);
 		GetWorldTimerManager().SetTimer(TimerHandle_Recharge, this, &ASPickupBase::RechargeCompleted, RechargeTime);

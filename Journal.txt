@@ -1511,3 +1511,8 @@ Lecture 17.4 "Parrying Attacks" using GameplayTags
 
 commit : Lecture 17.4 "Parrying Attacks" using GameplayTags
 
+Lecture 18 : Creating "Buffs", World Interaction
+
+Lecture 18.1 : Assignment 5 Solution Review
+
+	- simplify my credit design to match Tom ... no "max credits"

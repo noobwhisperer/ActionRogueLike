@@ -8,14 +8,31 @@ ASPlayerState::ASPlayerState()
 {
 }
 
-bool ASPlayerState::AdjustCredits(int32 Amount)
+void ASPlayerState::AdjustCredits(int32 Amount)
 {
-	int32 NewCredits = Credits + Amount;
-	if (Credits == MaxCredits || NewCredits < 0)
+	if (Amount == 0)
+	{
+		return;
+	}
+	Credits = FMath::Max(Credits + Amount, 0);
+	OnCreditsChanged.Broadcast(this, Credits);
+}
+
+bool ASPlayerState::RemoveCredits(int32 Amount)
+{
+	if (Amount < 0)
 	{
 		return false;
 	}
-	Credits = FMath::Clamp(NewCredits, 0, MaxCredits);
+	if(Amount == 0)
+	{
+		return true;
+	}
+	if (Credits < Amount)
+	{
+		return false;
+	}
+	Credits -= Amount;
 	OnCreditsChanged.Broadcast(this, Credits);
 	return true;
 }
