@@ -1429,3 +1429,85 @@ commit : Lecture 17.2 : Bug Fix
 
 Lecture 17.3 Gameplay Tags for DOOM-style Door & Keycard system
 
+	ok - his lecture was a bit confusing, because we already configured the Lever to open a "connected" treasure chest
+	remotely by just redirecting the interaction of the lever to the chest. So I just created 2 levers ... one that
+	does the redirection, and one that grants a colorerd key card:
+
+	LeverRemoteBP
+	LeverKeyCardBP
+
+	otherwise .... easy-peasy
+
+commit Lecture 17.3 Gameplay Tags for DOOM-style Door & Keycard system
+
+Lecture 17.4 "Parrying Attacks" using GameplayTags
+
+
+	3:48 : Absolutely LOVE the eyeroll and remark that the GameplayTag "rename" works "most of the time"
+
+	Note: YOU CANNOT CREATE NEW GAMEPLAY TAGS IN C++ ! You can only wuery the existing ones loaded into
+	the game from the ini files.
+
+	7:03 ?? Ok, now he's confused me... maybe you can ? RequestGmeplayTag ??
+	- look at the UE docs to figure it out.
+
+	- moved some BPs into folders in the UE content ... got 1 warning about TresureChest may be broken in cooked builds ...
+		dangling redirector ??
+		+ keep going for now... it works as tested in Editor. If there's redirector issues we can fix em later.
+
+	- temporarily grant "Status.Parry" to the PlayerCharacter BP by adding to it in Editor (before PIE) ... just to test.
+
+	- Add the SActionComponent to the ASAICharacter ... they will gain powers too via the Action System
+
+	- note: if and enemy AI and the Player both have Parry, the projectile can get into endless parry state back and forth
+		+ he suggests a fix could be to set a "Parried" flag on the projectile to indicate it has already been
+			parried, but I guess we don't do it ?
+
+	- create a new BP Action derived from USAction ... call it Action_Parry
+		+ override Event StartAction in BP graph
+			- call parent
+		+ rename the ActionName to "Parry" in the Class Defaults
+			- this is just an FName ... he mentions that we should probably refactor and make this a GameplayTag
+			- but we don't refactor at this time.
+
+	- somewhere along the line we missed a step ... the GetWorld() in the USAction_ProjectileAttack needs to be moved
+		to the base class USAction .. than all derived SActions can use it. FYI , this was preventing the
+		Delay node from being available in some the Parry BP that I created deriving from the C++ SAction class... the 
+		World is not available unless we do this override.
+
+		> OLD CODE SNIP :
+
+			// I'm not 100% clear about why we need to do this.
+			//note: this is a bit of a hack to get the world context, but it works because the outer of this action is the component,
+			//and the component is owned by the character, which is in the world. We could also consider passing in the world context
+			//as a parameter to the StartAction function, but that would require changing the signature of the function and all
+			//its overrides. Alternatively, we could store a reference to the world in the action when it's created, but that would
+			//require more code and potential for bugs if we forget to set it. Overall, this seems like a reasonable solution for now.
+			UWorld* USAction_ProjectileAttack::GetWorld() const
+			{
+				//note: this was set in the SActionComponent::AddAction function when the action was created.
+				//	The outer of the action is the component that owns it.
+				USActionComponent* ActionComp = Cast<USActionComponent>(GetOuter());
+
+				if (ActionComp == nullptr)
+				{
+					return nullptr;
+				}
+
+				UWorld* TheOuterWorld = ActionComp->GetWorld();
+
+				return TheOuterWorld;
+			}
+
+	- ok , squared away now.
+
+	- add the new Action_Parry to the list of player's default actions
+	- add Parry to the Project Settings Inputs ... now we can bind to the Parry in BP of the PlayerCharacter
+
+	- ok , so now we've demonstrated a way to add "temporary" buffs
+
+	- now add damage popup to the minions
+		+ we need to do this in BP ... the damage popup is not available in C++ because we made it in BP
+
+commit : Lecture 17.4 "Parrying Attacks" using GameplayTags
+

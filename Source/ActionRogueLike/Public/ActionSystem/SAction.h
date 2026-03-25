@@ -28,11 +28,13 @@ public:
 	void StartAction(AActor* Instigator);
 
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Action")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Action")
 	void StopAction(AActor* Instigator);
 
 	UFUNCTION(BlueprintCallable, Category= "Action")
 	bool IsRunning() const;
+		
+	virtual UWorld* GetWorld() const override;
 
 protected:
 

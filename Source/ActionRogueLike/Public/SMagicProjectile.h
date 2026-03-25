@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "SProjectileBase.h"
 #include "SMagicProjectile.generated.h"
 
@@ -22,6 +23,13 @@ protected:
 		
 	UPROPERTY(EditDefaultsOnly, Category = "SMagicProjectile")
 	float DamageAmount;
+
+
+	/// <summary>
+	/// This projectile will respond to parry attempts if the "other actor" matches this assigned ParryTag
+	/// </summary>
+	UPROPERTY(EditDefaultsOnly, Category = "SMagicProjectile")
+	FGameplayTag ParryTag;
 
 
 };
