@@ -150,6 +150,8 @@ void ASGameModeBase::RespawnPlayerElapsed(AController* Controller)
 	{
 		Controller->UnPossess(); // detaches the controller from the pawn, which will trigger the pawn's death and cleanup
 
+		// maybe we need to re-bind to the HUD ?
+
 		RestartPlayer(Controller);
 	}
 }

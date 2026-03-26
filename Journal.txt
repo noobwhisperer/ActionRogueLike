@@ -1527,4 +1527,19 @@ commit Lecture 18.1 : Assignment 5 Solution Review
 
 Lecture 18.2 : Creating Buffs & Debuffs (Damage over Time Effect)
 
+	- easy-peasy ... no notes
+
+commit : Lecture 18.2 : Creating Buffs & Debuffs (Damage over Time Effect)
+
+	-noticed a bug in testing... my health HUD widget seems broken after death.
+
+		+ quick investigation
+
+		+ ok - not so quick ... took a couple hours.
+			> the HUD is not getting disconnected from the "dead player" so the corpse is still updating the HUD when AI damage it
+			> my newly spawned player is also NOT updating the HUD at all ... only the corpse was connected to it.
+			> I added BP code to fix this... its a bit messy but works. I think it's good for now, but we need a more deliberate effort
+				to handle death/respawn transitions
+
+		+ NOTE: This just seems to be the state of the code/BP at this point in the project.
 
