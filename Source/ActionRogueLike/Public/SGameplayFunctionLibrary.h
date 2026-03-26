@@ -16,10 +16,10 @@ class ACTIONROGUELIKE_API USGameplayFunctionLibrary : public UBlueprintFunctionL
 	
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+	UFUNCTION(BlueprintCallable, Category = "ActionRogue | Gameplay")
 	static bool ApplyDamage(AActor* InstigatorActor, AActor* TargetActor, int32 DamageAmount);
 
-	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+	UFUNCTION(BlueprintCallable, Category = "ActionRogue | Gameplay")
 	static bool ApplyDirectionalDamage(AActor* InstigatorActor, AActor* TargetActor, int32 DamageAmount, const FHitResult& HitResult);
 	
 };

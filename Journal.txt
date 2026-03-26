@@ -1516,3 +1516,15 @@ Lecture 18 : Creating "Buffs", World Interaction
 Lecture 18.1 : Assignment 5 Solution Review
 
 	- simplify my credit design to match Tom ... no "max credits"
+		+ Except ! I think his approach is too complex ... separate Add and Remove and policy enforced that the argument for Amount
+			is positive makes thing more confusing IMO. Also, if the amount to be adjusted comes from some calculation that could result
+			in a gain or a loss, the calling code would have to branch and selecte Add or Remove... starts getting very tangled.
+
+	- most of my code is similar, but some diffs...
+	- I skipped the bonus step of using EQS to set powerup locations
+
+commit Lecture 18.1 : Assignment 5 Solution Review
+
+Lecture 18.2 : Creating Buffs & Debuffs (Damage over Time Effect)
+
+

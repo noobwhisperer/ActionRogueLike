@@ -15,7 +15,7 @@ void USActionComponent::BeginPlay()
 
 	for (TSubclassOf<USAction> ActionClass : DefaultActionTypes)
 	{
-		AddAction(ActionClass);
+		AddAction(GetOwner(), ActionClass);
 	}
 }
 
@@ -30,7 +30,7 @@ void USActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 }
 
 
-void USActionComponent::AddAction(TSubclassOf<USAction> ActionClass)
+void USActionComponent::AddAction(AActor* Instigator, TSubclassOf<USAction> ActionClass)
 {
 	if (!ensure(ActionClass))
 	{
@@ -41,7 +41,29 @@ void USActionComponent::AddAction(TSubclassOf<USAction> ActionClass)
 	if (ensure(NewAction))
 	{
 		Actions.Add(NewAction);
+
+		//	TSH :  The design may be getting too complicated here IMO ...
+		// The ActionComponent should just be as dumb as possible and only manage the list of actions and their tags.
+		// The logic for when to start an action should be in the level blueprint or in the character blueprint or something like that.
+		// For example, the statement below presumes that and action that has autostart can never be added to a character that cannot start it
+		// immediately. I'm not 100% sure this will always make sense, but maybe I'm overthinking it.
+
+		if(NewAction->bAutoState && ensure(NewAction->CanStart(Instigator)))
+		{
+			NewAction->StartAction(Instigator);
+		}
+
 	}
+}
+
+void USActionComponent::RemoveAction(USAction* ActionToRemove)
+{
+	if(!ensure(ActionToRemove && !ActionToRemove->IsRunning()))
+	{
+		return;
+	}
+
+	Actions.Remove(ActionToRemove);
 }
 
 bool USActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
